@@ -1,5 +1,7 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 function BaseLayout() {
+
+    const location = useLocation();
 
     return (
         <div className="min-h-screen flex flex-col bg-amber-50">
@@ -9,9 +11,9 @@ function BaseLayout() {
             </header>
             <nav className="bg-gray-100 px-6 py-3 shadow-md m-10 mt-0 rounded-lg">
                 <ul className="flex justify-around gap-8 text-sm font-sans">
-                    <li><Link to="/dashboard" className="hover:text-blue-800">Dashboard</Link></li>
-                    <li><Link to="/signup" className="hover:text-emerald-500">SignUp</Link></li>
-                    <li><Link to="/login" className="hover:text-emerald-500">Login</Link></li>
+                    <li><Link to="/dashboard" className={`hover:text-blue-800 ${location.pathname === "/dashboard" ? "font-bold underline text-blue-600" : "text-gray-700"}`}>Dashboard</Link></li>
+                    <li><Link to="/signup" className={`hover:text-emerald-500 ${location.pathname === "/signup" ? "font-bold underline text-blue-600" : "text-gray-700"}`}>SignUp</Link></li>
+                    <li><Link to="/login" className={`hover:text-emerald-500 ${location.pathname === "/login" ? "font-bold underline text-blue-600" : "text-gray-700"}`}>Login</Link></li>
                 </ul>
             </nav>
             <main className="flex-grow px-6 py-4 justify-center items-center flex">
