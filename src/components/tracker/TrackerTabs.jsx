@@ -1,8 +1,9 @@
-import Sidebar from "./Sidebar.jsx";
-import Topbar from "./Topbar.jsx";
-import TaskBoard from "./TaskBoard.jsx";
+import Sidebar from "../dashboard/Sidebar.jsx";
+import Greeting from "./Greeting.jsx";
+import TabBar from "./Tabbar.jsx";
 import React, {useState, useEffect} from "react";
-function DashboardLayout() {
+
+function TrackerTabs() {
 
     const [isSidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
 
@@ -20,15 +21,20 @@ function DashboardLayout() {
     },[]);
 
     return (
-        <div className="flex h-screen">
+        <div>
             <div>
                 <Sidebar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen}/>
             </div>
+
             <div className={`flex flex-col transition-all duration-500 ${isSidebarOpen ? 'ml-64' : 'ml-0'} flex-1`}>
-                <header className="h-48 bg-slate-200 p-4"><Topbar username={"Abhinav Kaushik"}/></header>
-                <main className="bg-slate-100 flex-1 p-4"><TaskBoard /></main>
+                <header className="h-48 bg-slate-200 p-4">
+                    <Greeting username="Abhi"/>
+                </header>
+                <main className="bg-slate-100 flex-1 p-4">
+                    <TabBar />
+                </main>
             </div>
         </div>
     );
 }
-export default DashboardLayout;
+export default TrackerTabs;

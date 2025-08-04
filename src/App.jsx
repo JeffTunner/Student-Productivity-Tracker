@@ -3,13 +3,24 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
+import TrackerHome from "./pages/tracker/TrackerHome.jsx";
+import DailyTracker from "./pages/tracker/DailyTracker.jsx";
+import WeeklyTracker from "./pages/tracker/WeeklyTracker.jsx";
+import MonthlyTracker from "./pages/tracker/MonthlyTracker.jsx";
+import YearlyTracker from "./pages/tracker/YearlyTracker.jsx";
+
 function App() {
     return (
         <Router>
             <Routes>   
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
-                    <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />          
+                    <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                    <Route path="/dashboard/tracker" element={<ProtectedRoute><TrackerHome /></ProtectedRoute>} /> 
+                    <Route path="/dashboard/tracker/daily" element={<ProtectedRoute><DailyTracker/></ProtectedRoute>} />  
+                    <Route path="/dashboard/tracker/weekly" element={<ProtectedRoute><WeeklyTracker/></ProtectedRoute>} />          
+                    <Route path="/dashboard/tracker/monthly" element={<ProtectedRoute><MonthlyTracker/></ProtectedRoute>} /> 
+                    <Route path="/dashboard/tracker/yearly" element={<ProtectedRoute><YearlyTracker/></ProtectedRoute>} /> 
             </Routes>
         </Router>
     );

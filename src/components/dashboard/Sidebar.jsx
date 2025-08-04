@@ -25,12 +25,12 @@ function Sidebar({ isOpen, setIsOpen}) {
                 </li>
 
                 <li className="bg-gray-300 text-gray-700 p-3 rounded-xl font-mono shadow-md hover:bg-gray-200 hover:cursor-pointer hover:shadow-xl" onClick={() => {setShowTrackers(!showTrackers)}} >
-                    Trackers
+                    <span className={`${location.pathname === "/tracker" ? "font-bold text-gray-50" : "text-gray-700"}`}>Trackers</span>
                     { showTrackers && (
                     <ul className="ml-4 mt-2 space-y-1 text-sm text-gray-900">
-                        <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/trackers/daily" className={`${location.pathname === "/trackers/daily" ? "font-bold text-gray-50" : "text-gray-700"}`}>Daily</Link></li>
-                        <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/trackers/weekly" className={`${location.pathname === "/trackers/weekly" ? "font-bold text-gray-50" : "text-gray-700"}`}>Weekly</Link></li>
-                        <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/trackers/monthly" className={`${location.pathname === "/trackers/monthly" ? "font-bold text-gray-50" : "text-gray-700"}`}>Monthly</Link></li>
+                        <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/dashboard/tracker/daily" className={`${location.pathname === "/dashboard/tracker/daily" ? "font-bold text-gray-50" : "text-gray-700 hover:text-gray-50"}`}>Daily</Link></li>
+                        <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/dashboard/tracker/weekly" className={`${location.pathname === "/dashboard/tracker/weekly" ? "font-bold text-gray-50" : "text-gray-700 hover:text-gray-50"}`}>Weekly</Link></li>
+                        <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/dashboard/tracker/monthly" className={`${location.pathname === "/dashboard/tracker/monthly" ? "font-bold text-gray-50" : "text-gray-700 hover:text-gray-50"}`}>Monthly</Link></li>
                     </ul>
                     )}                   
                 </li>
