@@ -1,10 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {useState} from "react";
 
 function Login() {
 
+    const navigate = useNavigate();
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
+
+    const handleLogin = (e) => {
+
+        e.preventDefault();
+
+        localStorage.setItem("isLoggedIn", "true");
+        console.log(email, password);
+        alert("You have successfully Logged In!!!");
+
+        navigate("/dashboard");
+
+    };
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-amber-50">
@@ -13,7 +26,7 @@ function Login() {
                 <h3 className="font-medium text-rose-600 text-3xl font-sans mb-2">Hello😊</h3>
                 <p className="font-thin text-orange-800 font-sans">Please Enter your Credentials to Login!</p>
             </div>
-            <form onSubmit={(e) => {e.preventDefault(); alert("You have successfully Logged In!!!"); console.log(email, password);}}>
+            <form onSubmit={handleLogin}>
                 <div className="mb-4 flex flex-col">
                     <label aria-label="Email" htmlFor="email" className="block text-gray-700 mb-1 text-xl font-semibold">Email:</label>
                     <input autoComplete="email" type="email" className="w-full rounded-md border-gray-200 border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-200" name="Email" id="email" onChange={(e) => {setEmail(e.target.value)}} />
