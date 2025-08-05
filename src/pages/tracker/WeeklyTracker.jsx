@@ -1,9 +1,10 @@
+import WeeklyView from "../../components/tracker/WeeklyView.jsx";
 
 function WeeklyTracker() {
 
     return(
         <div>
-            Weekly Coming...
+            <WeeklyView />
         </div>
     );
 }

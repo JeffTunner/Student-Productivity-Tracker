@@ -1,8 +1,10 @@
+import MonthlyView from "../../components/tracker/MonthlyView.jsx";
+
 function MonthlyTracker() {
 
     return(
         <div>
-            Monthly Coming...
+            <MonthlyView />
         </div>
     );
 }

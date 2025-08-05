@@ -1,9 +1,10 @@
+import YearlyView from "../../components/tracker/YearlyView.jsx";
 
 function YearlyTracker() {
 
     return(
         <div>
-            Yearly Coming...
+            <YearlyView />
         </div>
     );
 }

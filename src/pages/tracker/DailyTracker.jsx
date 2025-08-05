@@ -1,9 +1,10 @@
+import DailyView from "../../components/tracker/DailyView.jsx";
 
 function DailyTracker() {
 
     return(
         <div>
-            Coming...
+            <DailyView username="Abhi" />
         </div>
     );
 }
