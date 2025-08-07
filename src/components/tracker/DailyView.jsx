@@ -61,7 +61,3 @@ function DailyView({username}) {
 }
 export default DailyView;
 
-/*
-                                <h1 className="text-center font-extrabold text-3xl underline">Title: {card.title}</h1>
-                                <p>{card.description}</p>
-*/ 
