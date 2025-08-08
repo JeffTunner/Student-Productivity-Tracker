@@ -1,20 +1,18 @@
 import React, {useState} from "react";
 
-function TaskCard() {
+function TaskCard({card, onUpdate, onDelete}) {
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [isCardSet, setIsCardSet] = useState(false);
     const [taskInput, setTaskInput] = useState("");
-    const [task, setTask] = useState([]);
     const [editText, setEditText] = useState("");
 
-    function handleTitle(event) {
-        setTitle(event.target.value);
+    function handleTitleChange(e) {
+        const newTitle = e.target.value;
+        onUpdate(card.id, {...card, title: newTitle});
     }
 
-    function handleDescription(event) {
-        setDescription(event.target.value);
+    function handleDescriptionChange(e) {
+        const newDescription = e.target.value;
+        onUpdate(card.id, {...card, description: newDescription});
     }
 
     function handleTaskInput(event) {
@@ -22,78 +20,79 @@ function TaskCard() {
     }
 
     function handleAddTask() {
-        const newTask = {text: taskInput, editing: false};
         if(taskInput.trim() === "") return;
-
-        setTask(t => [...t, newTask]);
+        const newTask = {text: taskInput, editing: false};
+        const updatedTasks = [...(card.tasks || []), newTask];
         setTaskInput("");
+        onUpdate(card.id, {...card, tasks: updatedTasks});
     }
 
     function handleEditTask(index) {
-    const updatedTask = task.map((t, i) => {
+    const updatedTasks = card.tasks.map((t, i) => {
         if (i === index) {
-            setEditText(task[index].text);
+            setEditText(card.tasks[index].text);
         return  { ...t, editing: true }; 
         }
         return t;
     });
-    setTask(updatedTask);
+    onUpdate(card.id, {...card, tasks: updatedTasks});
     }
 
     function handleUpdateTask(index, newText) {
-        const updatedTask = task.map((t, i) => {
+        const updatedTasks = card.tasks.map((t, i) => {
         if (i === index) {
             setEditText("");
         return { ...t, text: newText, editing: false };
         }
         return t;
         });
-        setTask(updatedTask);
+        onUpdate(card.id, {...card, tasks: updatedTasks});
     }
 
-
+    function handleCancelEdit(index) {
+        const updatedTasks = card.tasks.map((t, i) =>
+        i === index ? { ...t, editing: false } : t
+        );
+        setEditText("");
+        onUpdate(card.id, { ...card, tasks: updatedTasks });
+    }
 
     function handleRemoveTask(index) {
-        const updatedTask = task.filter((_, i) => i !== index );
-        setTask(updatedTask);
+        const updatedTasks = card.tasks.filter((_, i) => i !== index );
+        onUpdate(card.id, {...card, tasks: updatedTasks});
     }
-
 
     return (
         <div className="flex flex-col border-slate-900 border-2 rounded-3xl px-8 py-6 shadow-xl w-[300px] max-w-full mt-8 cursor-pointer hover:shadow-2xl hover:ring-2 ring-black">
             {
-                !isCardSet ? (
+                !card.isSet ? (
                     <div className="flex flex-col gap-2 mb-4">
-                            <input type="text" placeholder="Enter the Title" value={title} onChange={handleTitle} 
-                            className="border border-black px-2 py-1 rounded" onKeyDown={(e) => {if(e.key === "Enter") setIsCardSet(true)} }/>
-                            <input type="text" placeholder="Description" value={description} onChange={handleDescription} 
-                            className="border border-black px-2 py-1 rounded" onKeyDown={(e) => {if(e.key === "Enter") setIsCardSet(true)} }/>
-                            <button className="border border-black px-4 py-2 rounded hover:bg-gray-100" onClick={() => {setIsCardSet(true)}}>
+                            <input type="text" placeholder="Enter the Title" value={card.title} onChange={handleTitleChange} 
+                            className="border border-black px-2 py-1 rounded" onKeyDown={(e) => {if(e.key === "Enter") {onUpdate(card.id,{...card, isSet: true});}} }/>
+                            <input type="text" placeholder="Description" value={card.description} onChange={handleDescriptionChange} 
+                            className="border border-black px-2 py-1 rounded" onKeyDown={(e) => {if(e.key === "Enter"){onUpdate(card.id,{...card, isSet: true});}} }/>
+                            <button className="border border-black px-4 py-2 rounded hover:bg-gray-100" onClick={() => onUpdate(card.id,{...card, isSet: true})}>
                                 Set Card
                             </button>                                  
                     </div>
                 ) : (
                     <div className="flex flex-col gap-2 mb-4">
-                        <h1 className="text-center font-extrabold text-3xl underline">{title}</h1>
-                        <p className="text-gray-700">{description}</p>
+                        <h1 className="text-center font-extrabold text-3xl underline">{card.title}</h1>
+                        <p className="text-gray-700">{card.description}</p>
                         <div>
                             <input type="text" placeholder="Add your tasks..." value={taskInput} onChange={handleTaskInput} /> 
                             <button className="border border-black px-4 py-2 rounded hover:bg-gray-100" onClick={handleAddTask}>+</button>
                         </div>
                         <ol>
-                            {task.map((task,index) => (
+                            {(card.tasks || []).map((task,index) => (
                                 <li key={index}>
                                     {task.editing ? (
                                         <input type="text" value={editText} className="border border-black px-2 py-1 rounded" 
                                         onChange={(e) => setEditText(e.target.value)} 
-                                        onKeyDown={(e) => {if(e.key === "Enter"){ handleUpdateTask(index, editText)}    
-                                            if (e.key === "Escape") {
-                                            const updatedTask = task.map((t, i) =>
-                                            i === index ? { ...t, editing: false } : t
-                                            );
-                                            setTask(updatedTask);
-                                            setEditText("");
-                                        } }}/>
+                                        onKeyDown={(e) => {if(e.key === "Enter"){ handleUpdateTask(index, editText);}    
+                                            if (e.key === "Escape") { handleCancelEdit(index);}
+                
+                                         }}/>
                                     ) : (
                                         <>
                                         <input type="checkbox" />
@@ -107,6 +106,9 @@ function TaskCard() {
                             )
                             )}
                         </ol>
+                        <button className="mt-2 border border-black px-2 py-1 rounded hover:shadow-2xl w-fit" onClick={() => onDelete(card.id)}>
+                            🗑️
+                        </button>
                                     
                    </div>
                 )
