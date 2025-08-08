@@ -21,7 +21,7 @@ function TaskCard({card, onUpdate, onDelete}) {
 
     function handleAddTask() {
         if(taskInput.trim() === "") return;
-        const newTask = {text: taskInput, editing: false};
+        const newTask = {text: taskInput, editing: false, completed: false};
         const updatedTasks = [...(card.tasks || []), newTask];
         setTaskInput("");
         onUpdate(card.id, {...card, tasks: updatedTasks});
@@ -62,6 +62,16 @@ function TaskCard({card, onUpdate, onDelete}) {
         onUpdate(card.id, {...card, tasks: updatedTasks});
     }
 
+    function handleToggleTask(index) {
+        const updatedTasks = card.tasks.map((t, i) => {
+            if(i === index) {
+                return {...t, completed: !t.completed};
+            }
+            return t;
+        });
+        onUpdate(card.id, {...card, tasks: updatedTasks});
+    }
+
     return (
         <div className="flex flex-col border-slate-900 border-2 rounded-3xl px-8 py-6 shadow-xl w-[300px] max-w-full mt-8 cursor-pointer hover:shadow-2xl hover:ring-2 ring-black">
             {
@@ -94,12 +104,12 @@ function TaskCard({card, onUpdate, onDelete}) {
                 
                                          }}/>
                                     ) : (
-                                        <>
-                                        <input type="checkbox" />
-                                        <span id="text" className="ml-2">{task.text}</span>
+                                        <div className="flex items-center">
+                                        <input type="checkbox" checked={task.completed} onChange={() => handleToggleTask(index)}/>
+                                        <span id="text" className={`ml-2 ${task.completed ? 'line-through text-gray-400' : ''}`}>{task.text}</span>
                                         <button className="border border-black p-2 ml-2" onClick={() => handleEditTask(index)}>✏️</button>
                                         <button className="border border-black p-2 ml-2" onClick={() => handleRemoveTask(index)}>❌</button>
-                                        </>
+                                        </div>
                                     )
                                     }
                                 </li>
