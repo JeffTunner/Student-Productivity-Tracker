@@ -4,7 +4,7 @@ function WeeklyTracker() {
 
     return(
         <div>
-            <WeeklyView />
+            <WeeklyView username="Abhi"/>
         </div>
     );
 }
