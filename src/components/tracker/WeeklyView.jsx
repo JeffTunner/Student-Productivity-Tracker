@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import DayCard from "./DayCard.jsx";
 
 function WeeklyView({username}) {
 
@@ -41,14 +43,9 @@ function WeeklyView({username}) {
                     [...Array(7)].map((_, i) => {
                         const day = new Date(monday);
                         day.setDate(monday.getDate() + i);
-                        console.log(day);
+                        
                     return (
-                        <div key={i} className="bg-gray-400 border-r border-black text-center">
-                            <div className={`font-bold ${(today.toDateString() === day.toDateString()) ? ' bg-slate-300 ' : ''}`}>
-                                {day.toLocaleDateString("en-US", {weekday: "short"})}
-                            </div>
-                            <div className={`${(today.toDateString() === day.toDateString()) ? ' bg-slate-300 ' : ''}`}>{day.getDate()}</div>
-                        </div>
+                       <DayCard key={i} date={day} isToday={today.toDateString() === day.toDateString()} />
                     );
                     })
                 }
