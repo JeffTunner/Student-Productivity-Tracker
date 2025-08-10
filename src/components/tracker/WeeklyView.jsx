@@ -3,6 +3,31 @@ import DayCard from "./DayCard.jsx";
 
 function WeeklyView({username}) {
 
+    const weeklycards = {
+        Mon: [],
+        Tue: [],
+        Wed: [],
+        Thu: [],
+        Fri: [],
+        Sat: [],
+        Sun: []
+    };
+    const dayNames = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+    const [week, setWeek] = useState(() => {
+        const saved = localStorage.getItem("weeklyTasks");
+        try{
+            return saved ? JSON.parse(saved) : weeklycards;
+        } catch (e) {
+        console.log("Couldnt load from storage", e);
+        return weeklycards;
+        }
+    });
+
+    useEffect(() => {
+        localStorage.setItem("weeklyTasks", JSON.stringify(week));
+    },[week]);
+
     const hours = new Date().getHours();
     const name = username || "user";
     let greeting;
@@ -32,6 +57,14 @@ function WeeklyView({username}) {
 
     const weekRange = `${formattedDate(monday)} - ${formattedDate(sunday)}`;
 
+    function handleUpdateWeek(dayKey, updatedData) {
+        setWeek(prev => ({
+            ...prev,
+            [dayKey]: updatedData
+        }));
+    }
+
+
     return (
         <div>
             <header className="flex flex-col items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
@@ -40,12 +73,12 @@ function WeeklyView({username}) {
             </header>
             <main className="grid grid-cols-7 border border-black min-h-screen">
                 {
-                    [...Array(7)].map((_, i) => {
+                    dayNames.map((dayName, i) => {
                         const day = new Date(monday);
                         day.setDate(monday.getDate() + i);
                         
                     return (
-                       <DayCard key={i} date={day} isToday={today.toDateString() === day.toDateString()} />
+                       <DayCard key={dayName} date={day} tasks={week[dayName]} isToday={today.toDateString() === day.toDateString()} onUpdate={(updatedTasks) => handleUpdateWeek(dayName, updatedTasks)}/>
                     );
                     })
                 }
