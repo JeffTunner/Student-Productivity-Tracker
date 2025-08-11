@@ -1,9 +1,72 @@
+import { useState } from "react";
 
 function MonthlyView() {
 
+    const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+
+    const headingDate = new Date(currentYear, currentMonth).toLocaleDateString("en-US",{
+        month: "long",
+        year: "numeric"
+    });
+
+    const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
+    const startDay = new Date(currentYear, currentMonth, 1).getDay();
+    let calenderDays = Array(startDay).fill(null);
+    for(let i = 1; i<=daysInMonth; i++) {
+        calenderDays.push(i);
+    }
+
+    function handleNextMonth() {
+        let nextMonth = currentMonth;
+        let nextYear = currentYear;
+        if(nextMonth === 11) {
+            nextMonth = 0;
+            nextYear++;
+        } else {
+            nextMonth++;
+        }
+        setCurrentMonth(nextMonth);
+        setCurrentYear(nextYear);
+        console.log(nextMonth, nextYear);
+    }
+
+    function handlePrevMonth() {
+        let prevMonth = currentMonth;
+        let prevYear = currentYear;
+        if(prevMonth === 0) {
+            prevMonth = 11;
+            prevYear--;
+        } else {
+            prevMonth--;
+        }
+        setCurrentMonth(prevMonth);
+        setCurrentYear(prevYear);
+        console.log(prevMonth, prevYear);
+    }
+
     return (
         <div>
-            Monthly 
+            <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
+                <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handlePrevMonth}>←</button>
+                <h1 className="font-mono font-extrabold text-xl">{headingDate}</h1>
+                <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handleNextMonth}>→</button>
+            </header>
+
+            <main>
+                <div className="grid grid-cols-7 gap-2 font-bold text-center">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName) => (
+                        <div key={dayName}>{dayName}</div>
+                    ))}
+                </div>
+                <div className="grid grid-cols-7 gap-2">
+                    {calenderDays.map((day, index) => (
+                        <div key={index} className="border p-4 text-center">
+                            {day}
+                        </div>
+                    ))}    
+                </div>    
+            </main> 
         </div>
     );
 }
