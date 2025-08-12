@@ -52,19 +52,24 @@ function TaskModal({isOpen, dateKey, onClose, tasks, onSaveTasks}) {
         onClose();
     }
 
-    
+    function handleClose() {
+        setTaskInput("");
+        setEditIndex(null);
+        onClose();
+    }
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg p-6 relative w-96 max-w-full">
-                <button className="absolute top-2 right-2 text-xl font-bold" onClick={onClose}>
+                <button className="absolute top-2 right-2 text-xl font-bold" onClick={handleClose}>
                     ❌
                 </button>
 
                 <h2 className="text-lg font-bold mb-4">Tasks for: {dateKey || "No Date Selected"}</h2>
 
                 <div className="flex gap-2 mb-4">
-                    <input type="text" placeholder="Type your tasks..." className="border w-full" value={taskInput} onChange={handleTaskInput}/>
+                    <input type="text" placeholder="Type your tasks..." className="border w-full" value={taskInput} onChange={handleTaskInput}
+                    onKeyDown={(e) => {if(e.key === "Enter") handleAddOrUpdateTask();}}/>
                     <button className="border-2 rounded-md border-slate-600 p-2 hover:shadow-2xl" onClick={handleAddOrUpdateTask}>
                         {editIndex !== null ? "✔️" : "+"}
                     </button>

@@ -5,9 +5,19 @@ function MonthlyView() {
 
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-    const [tasksByDate, setTasksByDate] = useState({});
     const [selectedDateKey, setSelectedDateKey] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [tasksByDate, setTasksByDate] = useState(() => {
+        const saved = localStorage.getItem("tasksByDate");
+        if(saved) {
+            try {
+                return JSON.parse(saved);
+            } catch {
+                return {};
+            }
+        }
+        return {};
+    });
 
     useEffect(() => {
         const saved = localStorage.getItem("tasksByDate");
@@ -116,6 +126,7 @@ function MonthlyView() {
             dateKey={selectedDateKey} 
             tasks={tasksByDate[selectedDateKey] || []}
             onSaveTasks={(newTasks) => {
+                if(!selectedDateKey) return;
                 setTasksByDate((prev) => ({...prev, [selectedDateKey]: newTasks}));
             }}/>
         </div>
