@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import TaskModal from "./TaskModal.jsx";
 
 function MonthlyView() {
 
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const [tasksByDate, setTasksByDate] = useState({});
+    const [selectedDateKey, setSelectedDateKey] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const saved = localStorage.getItem("tasksByDate");
@@ -16,14 +19,6 @@ function MonthlyView() {
             }
         }
     },[]);
-
-    useEffect(() => {
-    setTasksByDate({
-    "2025-08-14": ["Buy milk", "Finish project"],
-    "2025-08-15": ["Go to gym"]
-    });
-    }, []);
-
 
     useEffect(() => {
         localStorage.setItem("tasksByDate", JSON.stringify(tasksByDate));
@@ -75,9 +70,6 @@ function MonthlyView() {
         return `${year}-${month}-${dayStr}`;
     }
 
-    function addTask(e) {
-        const text = e.target.value;
-    }
 
     return (
         <div>
@@ -98,7 +90,13 @@ function MonthlyView() {
                         const dateKey = day ? getDateKey(currentYear, currentMonth, day) : null;
                         const tasks = day ? tasksByDate[dateKey] || [] : [];
                         return (
-                            <div key={index} className="border p-4 text-center">
+                            <div key={index} className="border p-4 text-center cursor-pointer" onClick={() => {
+                                if(day) {
+                                    const dateKey = getDateKey(currentYear, currentMonth, day);
+                                    setSelectedDateKey(dateKey);
+                                    setIsModalOpen(true);
+                                }
+                            }}>
                                 {day}
                                 {tasks.length > 0 && (
                                     <ul>
@@ -113,6 +111,13 @@ function MonthlyView() {
                     })}    
                 </div>    
             </main> 
+            <TaskModal isOpen={isModalOpen} 
+            onClose={() => setIsModalOpen(false)} 
+            dateKey={selectedDateKey} 
+            tasks={tasksByDate[selectedDateKey] || []}
+            onSaveTasks={(newTasks) => {
+                setTasksByDate((prev) => ({...prev, [selectedDateKey]: newTasks}));
+            }}/>
         </div>
     );
 }
