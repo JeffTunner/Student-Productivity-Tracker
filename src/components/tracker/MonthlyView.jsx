@@ -1,9 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function MonthlyView() {
 
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+    const [tasksByDate, setTasksByDate] = useState({});
+
+    useEffect(() => {
+        const saved = localStorage.getItem("tasksByDate");
+        if(saved) {
+            try {
+                setTasksByDate(JSON.parse(saved));
+            } catch {
+                setTasksByDate({});
+            }
+        }
+    },[]);
+
+    useEffect(() => {
+    setTasksByDate({
+    "2025-08-14": ["Buy milk", "Finish project"],
+    "2025-08-15": ["Go to gym"]
+    });
+    }, []);
+
+
+    useEffect(() => {
+        localStorage.setItem("tasksByDate", JSON.stringify(tasksByDate));
+    }, [tasksByDate]);
 
     const headingDate = new Date(currentYear, currentMonth).toLocaleDateString("en-US",{
         month: "long",
@@ -45,6 +69,16 @@ function MonthlyView() {
         console.log(prevMonth, prevYear);
     }
 
+    function getDateKey(year, monthIndex, day) {
+        const month = String(monthIndex + 1).padStart(2, "0");
+        const dayStr = String(day).padStart(2, "0");
+        return `${year}-${month}-${dayStr}`;
+    }
+
+    function addTask(e) {
+        const text = e.target.value;
+    }
+
     return (
         <div>
             <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
@@ -60,11 +94,23 @@ function MonthlyView() {
                     ))}
                 </div>
                 <div className="grid grid-cols-7 gap-2">
-                    {calenderDays.map((day, index) => (
-                        <div key={index} className="border p-4 text-center">
-                            {day}
-                        </div>
-                    ))}    
+                    {calenderDays.map((day, index) => {
+                        const dateKey = day ? getDateKey(currentYear, currentMonth, day) : null;
+                        const tasks = day ? tasksByDate[dateKey] || [] : [];
+                        return (
+                            <div key={index} className="border p-4 text-center">
+                                {day}
+                                {tasks.length > 0 && (
+                                    <ul>
+                                        {tasks.map((task,i) => (
+                                            <li key={i}>{task}</li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        ) 
+
+                    })}    
                 </div>    
             </main> 
         </div>
