@@ -95,12 +95,30 @@ function MonthlyView() {
         setIsWeekView(prev => !prev);
     }
 
-    function daysIntoWeeks(days) {
-        const weeks = [];
-        for (let i = 0; i < days.length; i++) {
-            weeks.push(days.slice(i, i+7));
-        }
-        return weeks;
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+    const lastDayOfMonth = new Date(currentYear, currentMonth+1, 0);
+    const startOfCalender = new Date(firstDayOfMonth);
+    startOfCalender.setDate(startOfCalender.getDate() - startOfCalender.getDay());
+    const endOfCalender = new Date(lastDayOfMonth);
+    endOfCalender.setDate(endOfCalender.getDate() + (6 - endOfCalender.getDay()));
+
+    let weeks = [];
+    const current = new Date(startOfCalender);
+
+    while(current <= endOfCalender) {
+        let weekStart = new Date(current);
+        let weekEnd = new Date(current);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+        
+        weeks.push({
+            start: new Date(weekStart),
+            end: new Date(weekEnd)
+        });
+        current.setDate(current.getDate() + 7);
+    }
+
+    function formatDate(date) {
+        return date.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
     }
 
 
@@ -119,12 +137,26 @@ function MonthlyView() {
             </header>
 
             <main>
+                {isWeekView ? (
+                    <div className="flex flex-wrap gap-3">
+                        {weeks.map((week, index) => (
+                            <div
+                            key={index}
+                            className="p-3 border rounded-lg cursor-pointer bg-white hover:bg-gray-100"
+                            onClick={() => console.log("Selected week:", week)}
+                            >
+                            {formatDate(week.start)} – {formatDate(week.end)}
+                            </div>
+                         ))}
+                    </div>
+                ) : ( 
+                <>
                 <div className="grid grid-cols-7 gap-2 font-bold text-center">
                     {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName) => (
                         <div key={dayName}>{dayName}</div>
                     ))}
                 </div>
-                <div className={`grid ${isWeekView ? 'grid-cols-4' : 'grid-cols-7'} gap-2`}>
+                <div className="grid grid-cols-7 gap-2">
                     {calenderDays.map((day, index) => {
                         const dateKey = day ? getDateKey(currentYear, currentMonth, day) : null;
                         const tasks = day ? tasksByDate[dateKey] || [] : [];
@@ -148,7 +180,11 @@ function MonthlyView() {
                         ) 
 
                     })}    
-                </div>    
+                </div>
+                </>
+                )}
+
+                    
             </main> 
             <TaskModal isOpen={isModalOpen} 
             onClose={() => setIsModalOpen(false)} 
