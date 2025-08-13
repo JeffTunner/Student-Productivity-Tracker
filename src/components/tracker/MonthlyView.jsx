@@ -80,13 +80,42 @@ function MonthlyView() {
         return `${year}-${month}-${dayStr}`;
     }
 
+    function handleToday() {
+        const today = new Date();
+        setCurrentMonth(today.getMonth());
+        setCurrentYear(today.getFullYear());
+    }
+
+    const today = new Date();
+    const todayKey = getDateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+    const [isWeekView, setIsWeekView] = useState(false);
+
+    function handleWeekView() {
+        setIsWeekView(prev => !prev);
+    }
+
+    function daysIntoWeeks(days) {
+        const weeks = [];
+        for (let i = 0; i < days.length; i++) {
+            weeks.push(days.slice(i, i+7));
+        }
+        return weeks;
+    }
+
 
     return (
         <div>
             <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
+                    <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleToday}>
+                        Today
+                    </button>
                 <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handlePrevMonth}>←</button>
                 <h1 className="font-mono font-extrabold text-xl">{headingDate}</h1>
                 <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handleNextMonth}>→</button>
+                <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleWeekView}>
+                    {isWeekView ? 'Month' : 'Week'}
+                </button>
             </header>
 
             <main>
@@ -95,12 +124,12 @@ function MonthlyView() {
                         <div key={dayName}>{dayName}</div>
                     ))}
                 </div>
-                <div className="grid grid-cols-7 gap-2">
+                <div className={`grid ${isWeekView ? 'grid-cols-4' : 'grid-cols-7'} gap-2`}>
                     {calenderDays.map((day, index) => {
                         const dateKey = day ? getDateKey(currentYear, currentMonth, day) : null;
                         const tasks = day ? tasksByDate[dateKey] || [] : [];
                         return (
-                            <div key={index} className="border p-4 text-center cursor-pointer" onClick={() => {
+                            <div key={index} className={`border p-4 text-center cursor-pointer ${dateKey === todayKey ? 'bg-slate-500 text-white rounded-full' : ''}`} onClick={() => {
                                 if(day) {
                                     const dateKey = getDateKey(currentYear, currentMonth, day);
                                     setSelectedDateKey(dateKey);
@@ -108,12 +137,12 @@ function MonthlyView() {
                                 }
                             }}>
                                 {day}
-                                {tasks.length > 0 && (
-                                    <ul>
+                                {tasks.length > 0 && ( `(${tasks.length})`
+                                   /* <ul>
                                         {tasks.map((task,i) => (
                                             <li key={i}>{task}</li>
                                         ))}
-                                    </ul>
+                                    </ul> */
                                 )}
                             </div>
                         ) 
@@ -127,7 +156,15 @@ function MonthlyView() {
             tasks={tasksByDate[selectedDateKey] || []}
             onSaveTasks={(newTasks) => {
                 if(!selectedDateKey) return;
-                setTasksByDate((prev) => ({...prev, [selectedDateKey]: newTasks}));
+                setTasksByDate((prev) => {
+                    const updated = {...prev};
+                    if(newTasks.length === 0) {
+                        delete updated[selectedDateKey];
+                    } else {
+                        updated[selectedDateKey] = newTasks;
+                    }
+                    return updated;
+                });
             }}/>
         </div>
     );
