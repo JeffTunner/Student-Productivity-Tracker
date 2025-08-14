@@ -125,9 +125,9 @@ function MonthlyView() {
     return (
         <div>
             <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
-                    <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleToday}>
-                        Today
-                    </button>
+                <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleToday}>
+                    Today
+                </button>
                 <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handlePrevMonth}>←</button>
                 <h1 className="font-mono font-extrabold text-xl">{headingDate}</h1>
                 <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handleNextMonth}>→</button>
