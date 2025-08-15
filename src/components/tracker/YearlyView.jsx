@@ -7,8 +7,27 @@ function YearlyView() {
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [isWeekGridView, setIsWeekGridView] = useState(false);
     const [isAdding, setIsAdding] = useState(false);
+    const [completedWeeks, setCompletedWeeks] = useState([]);
     const [selectedMonth, setSelectedMonth] = useState(null);
+    const [tasksByMonth, setTasksByMonth] = useState(() => {
+        const saved = localStorage.getItem("tasksByMonth");
+        if(saved) {
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                return {};
+            }
+        }
+        return {};
+    }, []);
 
+    useEffect(() => {
+        localStorage.setItem("tasksByMonth", JSON.stringify(tasksByMonth));
+    }, [tasksByMonth]);
+
+    const headingYear = new Date(currentYear, currentMonth).toLocaleDateString("en-US", {
+        year: "numeric"
+    });
 
     function handleToday() {
         const today = new Date();
@@ -44,6 +63,14 @@ function YearlyView() {
         }));
     }
 
+    function handleToggleWeek(weekIndex) {
+        setCompletedWeeks(prev => 
+            prev.includes(weekIndex) ?
+            prev.filter(w => w !== weekIndex) 
+            : [...prev, weekIndex]
+        );
+    }
+
     return (
         <div>
             <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
@@ -60,7 +87,7 @@ function YearlyView() {
                 {isWeekGridView ? (
                     <div className="grid grid-cols-4 gap-2 p-4">
                         {Array.from({length: 52}, (_, week) => (
-                            <div key={week} className="border p-4 rounded-lg  text-center font-bold hover:bg-gray-100 hover:shadow-lg transition cursor-pointer">
+                            <div key={week} className={`border p-4 rounded-lg  text-center font-bold hover:bg-gray-100 hover:shadow-lg transition cursor-pointer ${completedWeeks.includes(week) ? 'line-through' : ''}`} onClick={() => handleToggleWeek(week)}>
                                 Week {week + 1}
                             </div>
                         ))}
