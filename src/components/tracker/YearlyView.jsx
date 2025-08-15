@@ -7,7 +7,6 @@ function YearlyView() {
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
     const [isWeekGridView, setIsWeekGridView] = useState(false);
     const [isAdding, setIsAdding] = useState(false);
-    const [completedWeeks, setCompletedWeeks] = useState([]);
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [tasksByMonth, setTasksByMonth] = useState(() => {
         const saved = localStorage.getItem("tasksByMonth");
@@ -24,6 +23,21 @@ function YearlyView() {
     useEffect(() => {
         localStorage.setItem("tasksByMonth", JSON.stringify(tasksByMonth));
     }, [tasksByMonth]);
+
+    const [completedWeeks, setCompletedWeeks] = useState(() => {
+        const saved = localStorage.getItem("completedWeeks");
+        if(saved) {
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                return [];
+            }
+        }
+        return [];
+    });
+    useEffect(() => {
+        localStorage.setItem("completedWeeks", JSON.stringify(completedWeeks));
+    }, [completedWeeks]);
 
     const headingYear = new Date(currentYear, currentMonth).toLocaleDateString("en-US", {
         year: "numeric"
