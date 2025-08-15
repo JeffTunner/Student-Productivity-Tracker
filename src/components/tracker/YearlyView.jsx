@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import TaskModal from "./TaskModal.jsx";
 
 function YearlyView() {
 
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+    const [isWeekGridView, setIsWeekGridView] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
+    const [selectedMonth, setSelectedMonth] = useState(null);
 
-    const headingYear = new Date(currentYear, currentMonth).toLocaleDateString("en-US", {
-        year: "numeric"
-    });
 
     function handleToday() {
         const today = new Date();
@@ -26,6 +27,23 @@ function YearlyView() {
         setCurrentYear(prevYear);
     }
 
+    function handleGridView() {
+        setIsWeekGridView(!isWeekGridView);
+    }
+
+    function handleAddTasksForMonth(month) {
+        setSelectedMonth(month);
+        setIsAdding(true);
+    }
+
+    function handleSaveTasks(updatedTasks) {
+        const dateKey = `${currentYear}-${String(selectedMonth + 1).padStart(2, "0")}`;
+        setTasksByMonth(prev => ({
+            ...prev,
+            [dateKey]: updatedTasks
+        }));
+    }
+
     return (
         <div>
             <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
@@ -35,9 +53,19 @@ function YearlyView() {
                 <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handlePrevYear}>←</button>
                 <h1 className="font-mono font-extrabold text-xl">{headingYear}</h1>
                 <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handleNextYear}>→</button>
+                <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleGridView}>52 Grid View</button>
             </header>
 
             <main>
+                {isWeekGridView ? (
+                    <div className="grid grid-cols-4 gap-2 p-4">
+                        {Array.from({length: 52}, (_, week) => (
+                            <div key={week} className="border p-4 rounded-lg  text-center font-bold hover:bg-gray-100 hover:shadow-lg transition cursor-pointer">
+                                Week {week + 1}
+                            </div>
+                        ))}
+                    </div>
+                ) : (
                 <div className="grid grid-cols-3 gap-4 p-4 h-svh">
                     {Array.from({length: 12}, (_, i) => {
                         const monthName = new Date(currentYear, i).toLocaleDateString("en-US", {
@@ -45,13 +73,31 @@ function YearlyView() {
                         });
                         const isCurrentMonth = 
                         currentYear === new Date().getFullYear() && i === new Date().getMonth();
+                        const dateKey = `${currentYear}-${String(i + 1).padStart(2, "0")}`;
                         return (
-                        <div key={i} className={`border p-4 rounded-lg text-center font-bold hover:bg-gray-100 hover:shadow-lg transition cursor-pointer ${isCurrentMonth ? 'bg-gray-500' : ''}`}>
-                            {monthName}
+                        <div key={i} className={` flex flex-col justify-center items-center gap-6 border p-4 rounded-lg text-center font-bold hover:bg-gray-100 hover:shadow-lg transition cursor-pointer ${isCurrentMonth ? 'bg-gray-500' : ''}`}>
+                           <span>{monthName}
+                           {tasksByMonth[dateKey]?.length > 0 && ( `(${tasksByMonth[dateKey].length})`)}</span>
+                           {isAdding && selectedMonth === i ? (
+                            <TaskModal 
+                            isOpen={isAdding}
+                            dateKey={selectedMonth !== null ? `${currentYear}-${String(selectedMonth + 1).padStart(2, "0")}` : ""}
+                            onClose={() => setIsAdding(false)}
+                            tasks={selectedMonth !== null ? (tasksByMonth[`${currentYear}-${String(selectedMonth + 1).padStart(2, "0")}`] || []) : [] }
+                            onSaveTasks={handleSaveTasks}/>
+                           ) : (
+                            <button className="bg-slate-800 w-48 text-white p-2 font-extrabold rounded-lg shadow-lg hover:bg-slate-700 hover:shadow-2xl hover:shadow-slate-950 hover:scale-105 transform transition-transform duration-300"
+                            onClick={() => handleAddTasksForMonth(i)}>
+                                + Add Task
+                            </button>
+                           )} 
+
                         </div>
                         )
                     })}
                 </div>
+                )}
+
             </main>
         </div>
     );

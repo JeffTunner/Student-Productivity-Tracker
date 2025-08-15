@@ -31,6 +31,7 @@ function Sidebar({ isOpen, setIsOpen}) {
                         <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/dashboard/tracker/daily" className={`${location.pathname === "/dashboard/tracker/daily" ? "font-bold text-gray-50" : "text-gray-700 hover:text-gray-50"}`}>Daily</Link></li>
                         <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/dashboard/tracker/weekly" className={`${location.pathname === "/dashboard/tracker/weekly" ? "font-bold text-gray-50" : "text-gray-700 hover:text-gray-50"}`}>Weekly</Link></li>
                         <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/dashboard/tracker/monthly" className={`${location.pathname === "/dashboard/tracker/monthly" ? "font-bold text-gray-50" : "text-gray-700 hover:text-gray-50"}`}>Monthly</Link></li>
+                        <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/dashboard/tracker/yearly" className={`${location.pathname === "/dashboard/tracker/yearly" ? "font-bold text-gray-50" : "text-gray-700 hover:text-gray-50"}`}>Yearly</Link></li>
                     </ul>
                     )}                   
                 </li>
