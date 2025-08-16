@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import TaskModal from "./TaskModal.jsx";
+import { useParams, useNavigate } from "react-router-dom";
+import Breadcrumb from "./Breadcrumb.jsx";
 
 function MonthlyView() {
 
-    const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+    const {monthId} = useParams();
+    const initialMonth = monthId !== undefined ? parseInt(monthId, 10) : new Date().getMonth();
+    const initialYear = new Date().getFullYear();
+
+    const [currentMonth, setCurrentMonth] = useState(initialMonth);
+    const [currentYear, setCurrentYear] = useState(initialYear);
     const [selectedDateKey, setSelectedDateKey] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tasksByDate, setTasksByDate] = useState(() => {
@@ -34,6 +40,13 @@ function MonthlyView() {
         localStorage.setItem("tasksByDate", JSON.stringify(tasksByDate));
     }, [tasksByDate]);
 
+    useEffect(() => {
+    if (monthId !== undefined) {
+        setCurrentMonth(parseInt(monthId, 10));
+    }
+    }, [monthId]);
+
+
     const headingDate = new Date(currentYear, currentMonth).toLocaleDateString("en-US",{
         month: "long",
         year: "numeric"
@@ -46,6 +59,8 @@ function MonthlyView() {
         calenderDays.push(i);
     }
 
+    const navigate = useNavigate();
+
     function handleNextMonth() {
         let nextMonth = currentMonth;
         let nextYear = currentYear;
@@ -57,7 +72,7 @@ function MonthlyView() {
         }
         setCurrentMonth(nextMonth);
         setCurrentYear(nextYear);
-        console.log(nextMonth, nextYear);
+        navigate(`/monthly/${nextMonth}`);
     }
 
     function handlePrevMonth() {
@@ -71,7 +86,7 @@ function MonthlyView() {
         }
         setCurrentMonth(prevMonth);
         setCurrentYear(prevYear);
-        console.log(prevMonth, prevYear);
+        navigate(`/monthly/${prevMonth}`);
     }
 
     function getDateKey(year, monthIndex, day) {
@@ -120,8 +135,7 @@ function MonthlyView() {
     function formatDate(date) {
         return date.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
     }
-
-
+    
     return (
         <div>
             <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
@@ -135,6 +149,9 @@ function MonthlyView() {
                     {isWeekView ? 'Month' : 'Week'}
                 </button>
             </header>
+            <div>
+                <Breadcrumb year={initialYear} month={initialMonth}/>
+            </div>
 
             <main>
                 {isWeekView ? (

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import TaskModal from "./TaskModal.jsx";
+import { useNavigate } from "react-router-dom";
 
 function YearlyView() {
 
@@ -52,12 +53,14 @@ function YearlyView() {
         let nextYear = currentYear;
         nextYear++;
         setCurrentYear(nextYear);
+        navigate(`/yearly/${nextYear}`);
     }
 
     function handlePrevYear() {
         let prevYear = currentYear;
         prevYear--;
         setCurrentYear(prevYear);
+        navigate(`/yearly/${prevYear}`);
     }
 
     function handleGridView() {
@@ -85,6 +88,11 @@ function YearlyView() {
         );
     }
 
+    const navigate = useNavigate();
+    const handleMonthClick = (monthId) => {
+        navigate(`/monthly/${monthId}`);
+    }
+
     return (
         <div>
             <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
@@ -94,7 +102,7 @@ function YearlyView() {
                 <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handlePrevYear}>←</button>
                 <h1 className="font-mono font-extrabold text-xl">{headingYear}</h1>
                 <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handleNextYear}>→</button>
-                <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleGridView}>52 Grid View</button>
+                <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleGridView}>{isWeekGridView ? 'Yearly' : '52 Weeks Grid'}</button>
             </header>
 
             <main>
@@ -117,7 +125,7 @@ function YearlyView() {
                         const dateKey = `${currentYear}-${String(i + 1).padStart(2, "0")}`;
                         return (
                         <div key={i} className={` flex flex-col justify-center items-center gap-6 border p-4 rounded-lg text-center font-bold hover:bg-gray-100 hover:shadow-lg transition cursor-pointer ${isCurrentMonth ? 'bg-gray-500' : ''}`}>
-                           <span>{monthName}
+                           <span onClick={() => handleMonthClick(i)}>{monthName}
                            {tasksByMonth[dateKey]?.length > 0 && ( `(${tasksByMonth[dateKey].length})`)}</span>
                            {isAdding && selectedMonth === i ? (
                             <TaskModal 

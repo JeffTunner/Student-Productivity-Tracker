@@ -8,6 +8,8 @@ import DailyTracker from "./pages/tracker/DailyTracker.jsx";
 import WeeklyTracker from "./pages/tracker/WeeklyTracker.jsx";
 import MonthlyTracker from "./pages/tracker/MonthlyTracker.jsx";
 import YearlyTracker from "./pages/tracker/YearlyTracker.jsx";
+import MonthlyView from "./components/tracker/MonthlyView.jsx";
+import YearlyView from "./components/tracker/YearlyView.jsx";
 
 function App() {
     return (
@@ -20,7 +22,9 @@ function App() {
                     <Route path="/dashboard/tracker/daily" element={<ProtectedRoute><DailyTracker/></ProtectedRoute>} />  
                     <Route path="/dashboard/tracker/weekly" element={<ProtectedRoute><WeeklyTracker/></ProtectedRoute>} />          
                     <Route path="/dashboard/tracker/monthly" element={<ProtectedRoute><MonthlyTracker/></ProtectedRoute>} /> 
-                    <Route path="/dashboard/tracker/yearly" element={<ProtectedRoute><YearlyTracker/></ProtectedRoute>} /> 
+                    <Route path="/monthly/:monthId" element={<ProtectedRoute><MonthlyView/></ProtectedRoute>} />
+                    <Route path="/dashboard/tracker/yearly" element={<ProtectedRoute><YearlyTracker/></ProtectedRoute>} />
+                    <Route path="/yearly/:year" element={<ProtectedRoute><YearlyView/></ProtectedRoute>} /> 
             </Routes>
         </Router>
     );
