@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TaskCard from "./TaskCard.jsx";
+import Breadcrumb from "./Breadcrumb.jsx";
+import { useParams } from "react-router-dom";
 
 function DailyView({username}) {
 
@@ -61,12 +63,17 @@ function DailyView({username}) {
         setCards(updatedCard);
     }
 
+    const {year, monthId, date} = useParams();
+
     return (
     <div>
             <header className="flex flex-col items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
                 <h1 className="font-extrabold text-3xl text-slate-800">{greeting}, {username || "user"} 😊</h1>
                 <p className="text-slate-700">{today}</p>
             </header>
+            <div>
+                <Breadcrumb year={year} month={monthId} date={date}/>
+            </div>
         <div className="flex items-center flex-col">
 
                 <div className="mt-4">

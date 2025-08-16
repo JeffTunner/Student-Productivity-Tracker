@@ -90,7 +90,7 @@ function YearlyView() {
 
     const navigate = useNavigate();
     const handleMonthClick = (monthId) => {
-        navigate(`/monthly/${monthId}`);
+        navigate(`/monthly/${currentYear}/${monthId}`);
     }
 
     return (

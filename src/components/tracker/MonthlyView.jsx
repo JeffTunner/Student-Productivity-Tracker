@@ -72,7 +72,7 @@ function MonthlyView() {
         }
         setCurrentMonth(nextMonth);
         setCurrentYear(nextYear);
-        navigate(`/monthly/${nextMonth}`);
+        navigate(`/monthly/${nextYear}/${nextMonth}`);
     }
 
     function handlePrevMonth() {
@@ -86,7 +86,7 @@ function MonthlyView() {
         }
         setCurrentMonth(prevMonth);
         setCurrentYear(prevYear);
-        navigate(`/monthly/${prevMonth}`);
+        navigate(`/monthly/${prevYear}/${prevMonth}`);
     }
 
     function getDateKey(year, monthIndex, day) {
@@ -135,7 +135,7 @@ function MonthlyView() {
     function formatDate(date) {
         return date.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
     }
-    
+
     return (
         <div>
             <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">

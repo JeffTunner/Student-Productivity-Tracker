@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 function TaskModal({isOpen, dateKey, onClose, tasks, onSaveTasks}) {
 
@@ -58,6 +59,12 @@ function TaskModal({isOpen, dateKey, onClose, tasks, onSaveTasks}) {
         onClose();
     }
 
+    const navigate = useNavigate();
+    const {year, monthId} = useParams();
+    function handleDayToggle(date) {
+        navigate(`/daily/${year}/${monthId}/${date}`);
+    }
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg p-6 relative w-96 max-w-full">
@@ -65,7 +72,10 @@ function TaskModal({isOpen, dateKey, onClose, tasks, onSaveTasks}) {
                     ❌
                 </button>
 
-                <h2 className="text-lg font-bold mb-4">Tasks for: {dateKey || "No Date Selected"}</h2>
+                <h2 className="text-lg font-bold mb-4 cursor-pointer hover:shadow-xl"
+                onClick={() => handleDayToggle(dateKey)}>
+                    Tasks for: {dateKey || "No Date Selected"} (For more detail, click)
+                </h2>
 
                 <div className="flex gap-2 mb-4">
                     <input type="text" placeholder="Type your tasks..." className="border w-full" value={taskInput} onChange={handleTaskInput}
