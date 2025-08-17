@@ -9,5 +9,5 @@ createRoot(document.getElementById('root')).render(
     <TrackerProvider>
       <App />
     </TrackerProvider>
-  </StrictMode>,
+  </StrictMode>
 )
