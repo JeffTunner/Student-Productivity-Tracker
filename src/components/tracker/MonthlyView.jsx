@@ -2,15 +2,14 @@ import { useState, useEffect } from "react";
 import TaskModal from "./TaskModal.jsx";
 import { useParams, useNavigate } from "react-router-dom";
 import Breadcrumb from "./Breadcrumb.jsx";
+import { useDate } from "../../context/TrackerContext.jsx";
 
 function MonthlyView() {
 
-    const {monthId} = useParams();
-    const initialMonth = monthId !== undefined ? parseInt(monthId, 10) : new Date().getMonth();
-    const initialYear = new Date().getFullYear();
+    const {currentMonth, setCurrentMonth, currentYear, setCurrentYear} = useDate();
 
-    const [currentMonth, setCurrentMonth] = useState(initialMonth);
-    const [currentYear, setCurrentYear] = useState(initialYear);
+    const {monthId, year} = useParams();
+
     const [selectedDateKey, setSelectedDateKey] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tasksByDate, setTasksByDate] = useState(() => {
@@ -41,10 +40,11 @@ function MonthlyView() {
     }, [tasksByDate]);
 
     useEffect(() => {
-    if (monthId !== undefined) {
+    if (monthId !== undefined && year !== undefined) {
         setCurrentMonth(parseInt(monthId, 10));
+        setCurrentYear(parseInt(year, 10));
     }
-    }, [monthId]);
+    }, [monthId, year]);
 
 
     const headingDate = new Date(currentYear, currentMonth).toLocaleDateString("en-US",{
@@ -97,8 +97,11 @@ function MonthlyView() {
 
     function handleToday() {
         const today = new Date();
-        setCurrentMonth(today.getMonth());
-        setCurrentYear(today.getFullYear());
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        setCurrentMonth(month);
+        setCurrentYear(year);
+        navigate(`/monthly/${year}/${month}`);
     }
 
     const today = new Date();
@@ -150,7 +153,7 @@ function MonthlyView() {
                 </button>
             </header>
             <div>
-                <Breadcrumb year={initialYear} month={initialMonth}/>
+                <Breadcrumb year={currentYear} month={currentMonth}/>
             </div>
 
             <main>

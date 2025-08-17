@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import TaskCard from "./TaskCard.jsx";
 import Breadcrumb from "./Breadcrumb.jsx";
 import { useParams } from "react-router-dom";
+import { useDate } from "../../context/TrackerContext.jsx";
 
 function DailyView({username}) {
 
@@ -16,12 +17,6 @@ function DailyView({username}) {
     } else {
         greeting = "Good Evening";
     }
-
-    const today = new Date().toLocaleDateString("en-US", {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric'
-    });
 
     const [cards, setCards] = useState([]);
     const [hasLoaded, setHasLoaded] = useState(false);
@@ -64,15 +59,34 @@ function DailyView({username}) {
     }
 
     const {year, monthId, date} = useParams();
+    const {currentYear, setCurrentYear, currentMonth, setCurrentMonth, currentDay, setCurrentDay} = useDate();
+    useEffect(() => {
+        if(year && monthId && date) {
+            const parsedYear = parseInt(year, 10);
+            const parsedMonth = parseInt(monthId, 10);
+            const parsedDay = parseInt(date, 10);
+            setCurrentYear(parsedYear);
+            setCurrentMonth(parsedMonth);
+            setCurrentDay(parsedDay);
+        }
+    }, [year, monthId, date, setCurrentYear, setCurrentMonth, setCurrentDay]);
+
+    const selectedDate = (Number.isInteger(currentYear) && Number.isInteger(currentMonth) && Number.isInteger(currentDay)) 
+                            ? new Date(currentYear, currentMonth, currentDay) : new Date();
+    const headingDate = selectedDate.toLocaleDateString("en-US",{
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric'
+    });
 
     return (
     <div>
             <header className="flex flex-col items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
                 <h1 className="font-extrabold text-3xl text-slate-800">{greeting}, {username || "user"} 😊</h1>
-                <p className="text-slate-700">{today}</p>
+                <p className="text-slate-700">{headingDate}</p>
             </header>
             <div>
-                <Breadcrumb year={year} month={monthId} date={date}/>
+                <Breadcrumb year={currentYear} month={currentMonth} date={currentDay}/>
             </div>
         <div className="flex items-center flex-col">
 

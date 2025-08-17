@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import TaskModal from "./TaskModal.jsx";
 import { useNavigate } from "react-router-dom";
+import { useDate } from "../../context/TrackerContext.jsx";
 
 function YearlyView() {
 
-    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-    const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+    const {currentYear, setCurrentYear, currentMonth, setCurrentMonth} = useDate();
+
+
+
     const [isWeekGridView, setIsWeekGridView] = useState(false);
     const [isAdding, setIsAdding] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState(null);
@@ -46,7 +49,9 @@ function YearlyView() {
 
     function handleToday() {
         const today = new Date();
-        setCurrentYear(today.getFullYear());
+        const year = today.getFullYear();
+        setCurrentYear(year);
+        navigate(`/yearly/${year}`);
     }
 
     function handleNextYear() {

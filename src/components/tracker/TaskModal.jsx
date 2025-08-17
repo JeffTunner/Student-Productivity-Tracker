@@ -62,7 +62,9 @@ function TaskModal({isOpen, dateKey, onClose, tasks, onSaveTasks}) {
     const navigate = useNavigate();
     const {year, monthId} = useParams();
     function handleDayToggle(date) {
-        navigate(`/daily/${year}/${monthId}/${date}`);
+        const [y,m,d] = dateKey.split("-");
+        const monthIndex = parseInt(m , 10) - 1;
+        navigate(`/daily/${parseInt(y,10)}/${monthIndex}/${parseInt(d,10)}`);
     }
 
     return (
