@@ -28,13 +28,15 @@ export function TrackerProvider({children}) {
             const updated = {...prev};
             if(!updated[dateKey]) updated[dateKey] = {};
             if(!updated[dateKey][cardId]) updated[dateKey][cardId] = [];
-            
-            if (updated[dateKey][cardId].some(t => t.id === id)) {
+
+            const newId = id ?? (typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
+
+            if (updated[dateKey][cardId].some(t => t.id === newId || t.text.trim().toLowerCase() === taskText.trim().toLowerCase())) {
             return prev;
             }
 
             updated[dateKey][cardId] = [...updated[dateKey][cardId] , {
-            id, 
+            id: newId, 
             text: taskText, 
             completed: false, 
             isEditing: false

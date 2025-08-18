@@ -2,42 +2,17 @@ import { useState, useEffect } from "react";
 import TaskModal from "./TaskModal.jsx";
 import { useParams, useNavigate } from "react-router-dom";
 import Breadcrumb from "./Breadcrumb.jsx";
-import { useDate } from "../../context/TrackerContext.jsx";
+import { useDate, useTracker } from "../../context/TrackerContext.jsx";
 
 function MonthlyView() {
 
     const {currentMonth, setCurrentMonth, currentYear, setCurrentYear} = useDate();
+    const {tasks} = useTracker();
 
     const {monthId, year} = useParams();
 
     const [selectedDateKey, setSelectedDateKey] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [tasksByDate, setTasksByDate] = useState(() => {
-        const saved = localStorage.getItem("tasksByDate");
-        if(saved) {
-            try {
-                return JSON.parse(saved);
-            } catch {
-                return {};
-            }
-        }
-        return {};
-    });
-
-    useEffect(() => {
-        const saved = localStorage.getItem("tasksByDate");
-        if(saved) {
-            try {
-                setTasksByDate(JSON.parse(saved));
-            } catch {
-                setTasksByDate({});
-            }
-        }
-    },[]);
-
-    useEffect(() => {
-        localStorage.setItem("tasksByDate", JSON.stringify(tasksByDate));
-    }, [tasksByDate]);
 
     useEffect(() => {
     if (monthId !== undefined && year !== undefined) {
@@ -179,7 +154,7 @@ function MonthlyView() {
                 <div className="grid grid-cols-7 gap-2">
                     {calenderDays.map((day, index) => {
                         const dateKey = day ? getDateKey(currentYear, currentMonth, day) : null;
-                        const tasks = day ? tasksByDate[dateKey] || [] : [];
+                        const count = day ? (tasks[dateKey]?.["default"]?.length || 0) : 0;
                         return (
                             <div key={index} className={`border p-4 text-center cursor-pointer ${dateKey === todayKey ? 'bg-slate-500 text-white rounded-full' : ''}`} onClick={() => {
                                 if(day) {
@@ -189,13 +164,13 @@ function MonthlyView() {
                                 }
                             }}>
                                 {day}
-                                {tasks.length > 0 && ( `(${tasks.length})`
+                                {count > 0 && `(${count})`
                                    /* <ul>
                                         {tasks.map((task,i) => (
                                             <li key={i}>{task}</li>
                                         ))}
                                     </ul> */
-                                )}
+                                }
                             </div>
                         ) 
 
@@ -208,20 +183,7 @@ function MonthlyView() {
             </main> 
             <TaskModal isOpen={isModalOpen} 
             onClose={() => setIsModalOpen(false)} 
-            dateKey={selectedDateKey} 
-            tasks={tasksByDate[selectedDateKey] || []}
-            onSaveTasks={(newTasks) => {
-                if(!selectedDateKey) return;
-                setTasksByDate((prev) => {
-                    const updated = {...prev};
-                    if(newTasks.length === 0) {
-                        delete updated[selectedDateKey];
-                    } else {
-                        updated[selectedDateKey] = newTasks;
-                    }
-                    return updated;
-                });
-            }}/>
+            dateKey={selectedDateKey} />
         </div>
     );
 }
