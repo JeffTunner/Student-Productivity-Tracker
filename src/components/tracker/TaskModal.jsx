@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTracker } from "../../context/TrackerContext.jsx";
 
-function TaskModal({isOpen, dateKey, onClose}) {
+function TaskModal({isOpen, dateKey, onClose, cardId = "default"}) {
 
     const {tasks, addTask, removeTask, updateTask} = useTracker();
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ function TaskModal({isOpen, dateKey, onClose}) {
 
     if(!isOpen) return null;
 
-    const dateTasks = tasks[dateKey]?.["default"] || [];
+    const dateTasks = tasks[dateKey]?.[cardId] || [];
 
     function handleTaskInput(e) {
         setTaskInput(e.target.value);
@@ -21,12 +21,12 @@ function TaskModal({isOpen, dateKey, onClose}) {
         if(taskInput.trim() === "") return;
 
         if(editingTaskId !== null) {
-            updateTask(dateKey, "default", editingTaskId, {
+            updateTask(dateKey, cardId, editingTaskId, {
                 text: taskInput
             });
             setEditingTaskId(null);
         } else {
-            addTask(dateKey, "default", taskInput);
+            addTask(dateKey, cardId, taskInput);
         }
         setTaskInput("");
     }
@@ -37,11 +37,11 @@ function TaskModal({isOpen, dateKey, onClose}) {
     }
 
     function handleDeleteTask(taskId) {
-        removeTask(dateKey, "default", taskId);
+        removeTask(dateKey, cardId, taskId);
     }
 
     function handleToggleTask(task) {
-        updateTask(dateKey, "default", task.id, { completed: !task.completed });
+        updateTask(dateKey, cardId, task.id, { completed: !task.completed });
     }
 
     function handleSaveAndClose() {
@@ -51,7 +51,9 @@ function TaskModal({isOpen, dateKey, onClose}) {
     }
 
     function handleDayToggle() {
-        const [y,m,d] = dateKey.split("-");
+        const parts = dateKey.split("-");
+        if(parts.length < 3) return;
+        const [y,m,d] = parts;
         const monthIndex = parseInt(m , 10) - 1;
         navigate(`/daily/${parseInt(y,10)}/${monthIndex}/${parseInt(d,10)}`);
     }
