@@ -7,7 +7,6 @@ import { useDate } from "../../context/TrackerContext.jsx";
 function DailyView({username}) {
 
     const hours = new Date().getHours();
-    const name = username;
     let greeting;
     
     if(hours < 12) {
@@ -39,8 +38,8 @@ function DailyView({username}) {
 
 
     function handleAddCard() {
-        const newCard = {id: Date.now(), title: "", description: "", tasks: [], isSet: false};
-        setCards(c => [...c, newCard]);
+        const newCard = {id: Date.now(), title: "", description: "", isSet: false};
+        setCards((c) => [...c, newCard]);
     }
 
     function handleUpdateCard(id, updatedData) {
@@ -104,7 +103,7 @@ function DailyView({username}) {
                 <div className="flex flex-wrap gap-8 ">
                     {
                         cards.map((card, index) => (
-                            <TaskCard key={card.id} card={card} onUpdate={handleUpdateCard} onDelete={handleDeleteCard}/>
+                            <TaskCard key={card.id} card={card} onUpdate={handleUpdateCard} onDelete={handleDeleteCard} dateKey={`${currentYear}-${String(currentMonth+1).padStart(2, "0")}-${String(currentDay).padStart(2, "0")}`}/>
                         ))
                     }
                 </div>

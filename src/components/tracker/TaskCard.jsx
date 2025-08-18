@@ -1,16 +1,14 @@
 import React, {useState} from "react";
 import { useTracker } from "../../context/TrackerContext";
 
-function TaskCard({card, onUpdate, onDelete}) {
+function TaskCard({card, onUpdate, onDelete, dateKey}) {
 
-    const {tasks, addTask, removeTask, updateTask, currentYear, currentMonth, currentDay} = useTracker();
+    const {tasks, addTask, removeTask, updateTask} = useTracker();
 
     const [taskInput, setTaskInput] = useState("");
     const [editText, setEditText] = useState("");
 
-    const dateKey = `${currentYear}-${String(currentMonth+1).padStart(2, "0")}-${String(currentDay).padStart(2, "0")}`;
-
-    const dayTasks = (tasks[dateKey]?.[card.id]) || [];
+    const dayTasks = (tasks?.[dateKey]?.[card.id]) || [];
 
     function handleTitleChange(e) {
         const newTitle = e.target.value;
