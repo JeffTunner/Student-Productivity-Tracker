@@ -11,6 +11,7 @@ import YearlyTracker from "./pages/tracker/YearlyTracker.jsx";
 import MonthlyView from "./components/tracker/MonthlyView.jsx";
 import YearlyView from "./components/tracker/YearlyView.jsx";
 import DailyView from "./components/tracker/DailyView.jsx";
+import Journal from "./pages/Journal.jsx";
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                     <Route path="/monthly/:year/:monthId" element={<ProtectedRoute><MonthlyView/></ProtectedRoute>} />
                     <Route path="/dashboard/tracker/yearly" element={<ProtectedRoute><YearlyTracker/></ProtectedRoute>} />
                     <Route path="/yearly/:year" element={<ProtectedRoute><YearlyView/></ProtectedRoute>} /> 
+                    <Route path="/dashboard/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>}/>
             </Routes>
         </Router>
     );

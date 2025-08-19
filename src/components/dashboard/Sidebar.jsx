@@ -25,7 +25,7 @@ function Sidebar({ isOpen, setIsOpen}) {
                 </li>
 
                 <li className="bg-gray-300 text-gray-700 p-3 rounded-xl font-mono shadow-md hover:bg-gray-200 hover:cursor-pointer hover:shadow-xl" onClick={() => {setShowTrackers(!showTrackers)}} >
-                    <span className={`${location.pathname === "/tracker" ? "font-bold text-gray-50" : "text-gray-700"}`}>Trackers</span>
+                    <span className={`${location.pathname === "/dashboard/tracker" ? "font-bold text-gray-50" : "text-gray-700"}`}>Trackers</span>
                     { showTrackers && (
                     <ul className="ml-4 mt-2 space-y-1 text-sm text-gray-900">
                         <li className="text-sm border-2 border-black rounded-lg hover:bg-slate-500 hover:text-gray-50 hover:underline p-1"><Link to="/dashboard/tracker/daily" className={`${location.pathname === "/dashboard/tracker/daily" ? "font-bold text-gray-50" : "text-gray-700 hover:text-gray-50"}`}>Daily</Link></li>
@@ -37,19 +37,19 @@ function Sidebar({ isOpen, setIsOpen}) {
                 </li>
 
                 <li className="bg-gray-300 p-3 rounded-xl font-mono shadow-md hover:bg-gray-200 hover:cursor-pointer hover:shadow-xl">
-                    <Link to="/journal" className={`${location.pathname === "/journal" ? "font-bold text-gray-50" : "text-gray-700"}`}>Journal</Link>
+                    <Link to="/dashboard/journal" className={`${location.pathname === "/dashboard/journal" ? "font-bold text-gray-50" : "text-gray-700"}`}>Journal</Link>
                 </li>
 
                 <li className="bg-gray-300 p-3 rounded-xl font-mono shadow-md hover:bg-gray-200 hover:cursor-pointer hover:shadow-xl">
-                    <Link to="/mood" className={`${location.pathname === "/mood" ? "font-bold text-gray-50" : "text-gray-700"}`}>Mood</Link>
+                    <Link to="/dashboard/mood" className={`${location.pathname === "/dashboard/mood" ? "font-bold text-gray-50" : "text-gray-700"}`}>Mood</Link>
                 </li>
 
                 <li className="bg-gray-300 p-3 rounded-xl font-mono shadow-md hover:bg-gray-200 hover:cursor-pointer hover:shadow-xl">
-                    <Link to="/ai" className={`${location.pathname === "/ai" ? "font-bold text-gray-50" : "text-gray-700"}`}>AI Assistant</Link>
+                    <Link to="/dashboard/ai" className={`${location.pathname === "/dashboard/ai" ? "font-bold text-gray-50" : "text-gray-700"}`}>AI Assistant</Link>
                 </li>
 
                 <li className="bg-gray-300 p-3 rounded-xl font-mono shadow-md hover:bg-gray-200 hover:cursor-pointer hover:shadow-xl">
-                    <Link to="/settings" className={`${location.pathname === "/settings" ? "font-bold text-gray-50" : "text-gray-700"}`}>Settings</Link>
+                    <Link to="/dashboard/settings" className={`${location.pathname === "/dashboard/settings" ? "font-bold text-gray-50" : "text-gray-700"}`}>Settings</Link>
                 </li>
 
             </ul>
