@@ -12,6 +12,7 @@ import MonthlyView from "./components/tracker/MonthlyView.jsx";
 import YearlyView from "./components/tracker/YearlyView.jsx";
 import DailyView from "./components/tracker/DailyView.jsx";
 import Journal from "./pages/Journal.jsx";
+import Mood from "./pages/Mood.jsx";
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                     <Route path="/dashboard/tracker/yearly" element={<ProtectedRoute><YearlyTracker/></ProtectedRoute>} />
                     <Route path="/yearly/:year" element={<ProtectedRoute><YearlyView/></ProtectedRoute>} /> 
                     <Route path="/dashboard/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>}/>
+                    <Route path="/dashboard/mood" element={<ProtectedRoute><Mood /></ProtectedRoute>}/>
             </Routes>
         </Router>
     );
