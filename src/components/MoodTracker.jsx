@@ -1,5 +1,5 @@
 import Sidebar from "./dashboard/Sidebar.jsx";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useJournalMood } from "../context/JournalMoodContext.jsx";
 
 function MoodTracker() {

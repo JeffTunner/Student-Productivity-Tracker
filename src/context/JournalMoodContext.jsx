@@ -3,9 +3,7 @@ import { useState, useEffect, createContext, useContext } from "react";
 const JournalMoodContext = createContext();
 
 export function JournalMoodProvider({children}) {
-
-
-
+    
     const [journalData, setJournalData] = useState(() => {
         const saved = localStorage.getItem("journal");
         if(saved) {
