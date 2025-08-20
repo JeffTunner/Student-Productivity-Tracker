@@ -3,7 +3,7 @@ import { useState, useEffect, createContext, useContext } from "react";
 const JournalMoodContext = createContext();
 
 export function JournalMoodProvider({children}) {
-    
+
     const [journalData, setJournalData] = useState(() => {
         const saved = localStorage.getItem("journal");
         if(saved) {
@@ -20,6 +20,8 @@ export function JournalMoodProvider({children}) {
         localStorage.setItem("journal", JSON.stringify(journalData));
     }, [journalData]);
 
+    const [savedMessage, setSavedMessage] = useState("");
+
     const addOrUpdateEntry = (dateKey, entryText) => {
         setJournalData(prev => ({
             ...prev,
@@ -28,6 +30,8 @@ export function JournalMoodProvider({children}) {
                 entry: entryText
             }
         }));
+        setSavedMessage("Saved! ✔️");
+        setTimeout(() => setSavedMessage(""), 2000);
     }
 
     const setMood = (dateKey, moodValue) => {
@@ -38,13 +42,16 @@ export function JournalMoodProvider({children}) {
                 mood: moodValue
             }
         }));
+        setSavedMessage("Saved! ✔️");
+        setTimeout(() => setSavedMessage(""), 2000);
     }
 
     return (
         <JournalMoodContext.Provider
         value={{
             journalData, setJournalData,
-            addOrUpdateEntry, setMood
+            addOrUpdateEntry, setMood,
+            savedMessage, setSavedMessage
         }}>
             {children}
         </JournalMoodContext.Provider>

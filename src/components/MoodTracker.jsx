@@ -5,7 +5,7 @@ import { useJournalMood } from "../context/JournalMoodContext.jsx";
 function MoodTracker() {
 
     const [isSidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
-    const {journalData, setMood} = useJournalMood();
+    const {journalData, setMood, savedMessage} = useJournalMood();
     const today = new Date();
     const dateKey = today.toISOString().split('T')[0];
 
@@ -53,22 +53,25 @@ function MoodTracker() {
                     <div className="w-full max-w-xl bg-white border-4 border-black rounded-2xl shadow-[6px_6px_0px_black] p-8 flex flex-col items-center gap-6">
                         <p className="font-mono font-bold text-lg">Adjust according to your mood...</p>
                         <div className="flex flex-col items-center gap-2">
-                            <span className="text-7xl">{moodEmojis[todayMood-1]}</span>
-                            <span className="font-mono font-bold text-xl">{moodLabels[todayMood-1]}</span>
+                            <span className="text-7xl">{moodEmojis[tempMood-1]}</span>
+                            <span className="font-mono font-bold text-xl">{moodLabels[tempMood-1]}</span>
                         </div>
                                     
                         <input type="range" 
                             min="1" max="10" 
                             className="w-80 accent-slate-800 cursor-pointer"
                             value={tempMood} 
-                            onChange={(e) => setMood(dateKey, parseInt(e.target.value))}/>
+                            onChange={(e) => setTempMood(e.target.value)}/>
 
                         <button onClick={(e) => setMood(dateKey, tempMood)}
-                        className="bg-slate-800 text-white px-6 py-3 font-extrabold rounded-xl 
+                        disabled={tempMood===0}
+                        className={`bg-slate-800 text-white px-6 py-3 font-extrabold rounded-xl 
                                        shadow-[3px_3px_0px_black] hover:bg-slate-700 hover:scale-105 
-                                       hover:shadow-[5px_5px_0px_black] transform transition duration-300">
+                                       hover:shadow-[5px_5px_0px_black] transform transition duration-300 ${tempMood===0} ? "bg-gray-400 cursor-not-allowed" : ""`}>
                             Save Mood
                         </button>
+
+                        {savedMessage && <p className="text-green-500 mt-2">{savedMessage}</p>}
                   
                     </div>
 

@@ -5,7 +5,7 @@ import { useJournalMood } from "../context/JournalMoodContext.jsx";
 function JournalPage() {
 
     const [isSidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
-    const {journalData, addOrUpdateEntry} = useJournalMood();
+    const {journalData, addOrUpdateEntry, savedMessage} = useJournalMood();
     const today = new Date();
     const dateKey = today.toISOString().split('T')[0];
 
@@ -53,10 +53,14 @@ function JournalPage() {
                  </textarea>
                     </div>
                     <div>
-                        <button className="bg-slate-800 text-white px-6 py-3 font-extrabold rounded-xl 
+                        <button disabled={!tempEntry.trim()}
+                        className={`bg-slate-800 text-white px-6 py-3 font-extrabold rounded-xl 
                        shadow-[3px_3px_0px_black] hover:bg-slate-700 hover:scale-105 
-                       hover:shadow-[5px_5px_0px_black] transform transition duration-300" onClick={() => addOrUpdateEntry(dateKey, tempEntry)}>Save</button>
+                       hover:shadow-[5px_5px_0px_black] transform transition duration-300 ${!tempEntry.trim()} ? "bg-gray-400 cursor-not-allowed" : "" `} 
+                       onClick={() => addOrUpdateEntry(dateKey, tempEntry)}>Save</button>
                     </div>
+                    
+                    {savedMessage && <p className="text-green-500 mt-2">{savedMessage}</p>}
                     
                 </main>
             </div>
