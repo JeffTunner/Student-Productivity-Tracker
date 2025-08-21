@@ -4,9 +4,8 @@ const AiContext = createContext();
 
 export function AiProvider({children}) {
     
-    const today = new Date();
-    const now = () => today.toISOString().split('T')[0];
-    const genId = () => today + Math.random().toString(16).slice(2);
+    const now = () => new Date().toISOString().split('T')[0];
+    const genId = () => Date.now().toString(36) + Math.random().toString(16).slice(2);
     const LS_KEY = "ai:threads:v1"
     const [activeThreadId, setActiveThreadId] = useState(null);
     const [threads, setThreads] = useState(() => {

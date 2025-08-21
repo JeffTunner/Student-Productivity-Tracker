@@ -1,4 +1,4 @@
-import AiPage from "../components/AiPage.jsx";
+import AiPage from "../components/ai/AiPage.jsx";
 
 function Ai() {
 

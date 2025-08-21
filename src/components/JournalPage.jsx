@@ -56,7 +56,7 @@ function JournalPage() {
                         <button disabled={!tempEntry.trim()}
                         className={`bg-slate-800 text-white px-6 py-3 font-extrabold rounded-xl 
                        shadow-[3px_3px_0px_black] hover:bg-slate-700 hover:scale-105 
-                       hover:shadow-[5px_5px_0px_black] transform transition duration-300 ${!tempEntry.trim()} ? "bg-gray-400 cursor-not-allowed" : "" `} 
+                       hover:shadow-[5px_5px_0px_black] transform transition duration-300 ${!tempEntry.trim() ? "bg-gray-400 cursor-not-allowed" : "" }`} 
                        onClick={() => addOrUpdateEntry(dateKey, tempEntry)}>Save</button>
                     </div>
                     
