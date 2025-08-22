@@ -43,6 +43,7 @@ export function AiProvider({children}) {
 
     function appendMessages(threadId, {role, content}) {
         if(!threads[threadId]) return;
+
         setThreads((prev) => ({
             ...prev,
             [threadId]: {
@@ -54,6 +55,35 @@ export function AiProvider({children}) {
                 ]
             }
         }));
+
+        if(role === "user") {
+            setTimeout(() => {
+                const fakeReply = getFakeAIResponse(content);
+                setThreads((prev) => ({
+                    ...prev,
+                    [threadId]: {
+                        ...prev[threadId],
+                        updatedAt: now(),
+                        messages: [
+                            ...prev[threadId].messages,
+                            {id: genId(), role: "assistant", content: fakeReply, ts: now()}
+                        ]
+                    }
+                }));
+            }, 1000);
+        }
+    }
+
+    function getFakeAIResponse(userMessage) {
+        const replies = [
+            "Hmm, that’s interesting!",
+            "Can you tell me more?",
+            "I see. Let’s think about that.",
+            "Got it 👍",
+            "Thanks for sharing!"
+        ];
+    
+        return replies[Math.floor(Math.random() * replies.length)];
     }
 
 
@@ -63,7 +93,7 @@ export function AiProvider({children}) {
         value={{
             activeThreadId, setActiveThreadId,
             threads, setThreads,
-            newThread, appendMessages
+            newThread, appendMessages, getFakeAIResponse
         }}>
             {children}
         </AiContext.Provider>
