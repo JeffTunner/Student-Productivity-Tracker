@@ -1,4 +1,5 @@
 import ChatWindow from "./ChatWindow.jsx";
+import MessageComposer from "./MessageComposer.jsx";
 import ThreadList from "./ThreadList.jsx";
 function AiPage() {
     
@@ -10,7 +11,7 @@ function AiPage() {
 
             <div className="flex flex-1 flex-col">
                 <ChatWindow />
-                composer
+                <MessageComposer />
             </div>
         </div>
     );
