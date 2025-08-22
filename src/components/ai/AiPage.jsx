@@ -1,3 +1,4 @@
+import ChatWindow from "./ChatWindow.jsx";
 import ThreadList from "./ThreadList.jsx";
 function AiPage() {
     
@@ -6,9 +7,9 @@ function AiPage() {
             <div className="w-64 border-r border-black p-4">
                 <ThreadList />
             </div>
-            Main area
+
             <div className="flex flex-1 flex-col">
-                messages list
+                <ChatWindow />
                 composer
             </div>
         </div>
