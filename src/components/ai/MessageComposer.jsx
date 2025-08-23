@@ -3,7 +3,7 @@ import { useState } from "react";
 
 function MessageComposer() {
 
-    const {appendMessages, activeThreadId} = useAi();
+    const {appendMessage, activeThreadId, clearThread} = useAi();
     const [newMessage, setNewMessage] = useState("");
 
     const handleSend = () => {
@@ -12,7 +12,7 @@ function MessageComposer() {
             alert("Select or create new Thread!");
             return;
         }
-        appendMessages(activeThreadId, {
+        appendMessage(activeThreadId, {
             role: "user",
             content: newMessage
         });
@@ -22,14 +22,24 @@ function MessageComposer() {
     return (
         <div className="flex gap-4 m-4">
 
-            <input type="text" placeholder="Ask for help"
-            className="border w-full rounded px-4 py-4"
-            value={newMessage} onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={(e) => {if(e.key === "Enter") handleSend();}}/>
+            <textarea
+                placeholder="Ask for help"
+                className="border w-full rounded px-4 py-2 resize-none"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    handleSend();
+                    e.preventDefault();
+                }
+
+                }}
+            />
 
             <button onClick={handleSend} className="border-2 rounded-md border-slate-600 p-2 hover:shadow-2xl"> 
                 Send
             </button>
+            <button onClick={() => clearThread(activeThreadId)}>❌</button>
 
         </div>
     );

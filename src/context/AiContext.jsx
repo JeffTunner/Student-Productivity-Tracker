@@ -4,7 +4,7 @@ const AiContext = createContext();
 
 export function AiProvider({children}) {
     
-    const now = () => new Date().toISOString().split('T')[0];
+    const now = () => new Date();
     const genId = () => Date.now().toString(36) + Math.random().toString(16).slice(2);
     const LS_KEY = "ai:threads:v1"
     const [activeThreadId, setActiveThreadId] = useState(null);
@@ -41,7 +41,7 @@ export function AiProvider({children}) {
         return id;
     }
 
-    function appendMessages(threadId, {role, content}) {
+    function appendMessage(threadId, {role, content}) {
         if(!threads[threadId]) return;
 
         setThreads((prev) => ({
@@ -86,6 +86,24 @@ export function AiProvider({children}) {
         return replies[Math.floor(Math.random() * replies.length)];
     }
 
+    function clearThread(threadId) {
+        if(!threads[threadId]) return;
+
+        setThreads((prev) => ({
+            ...prev,
+            [threadId]: {
+                ...prev[threadId],
+                messages: prev[threadId].messages.slice(0, 1)
+            }
+        }));
+    }
+
+    function deleteThread(threadId) {
+        const newThreads = {...threads};
+        delete newThreads[threadId];
+        setThreads(newThreads);
+        if(activeThreadId === threadId) setActiveThreadId(null);
+    }
 
 
     return (
@@ -93,7 +111,7 @@ export function AiProvider({children}) {
         value={{
             activeThreadId, setActiveThreadId,
             threads, setThreads,
-            newThread, appendMessages, getFakeAIResponse
+            newThread, appendMessage, getFakeAIResponse, clearThread, deleteThread
         }}>
             {children}
         </AiContext.Provider>
