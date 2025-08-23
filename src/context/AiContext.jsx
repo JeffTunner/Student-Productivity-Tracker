@@ -56,9 +56,8 @@ export function AiProvider({children}) {
             }
         }));
 
-        if(role === "user") {
-            setTimeout(() => {
-                const fakeReply = getFakeAIResponse(content);
+        if(role === "user") {            
+                const tempId = genId();
                 setThreads((prev) => ({
                     ...prev,
                     [threadId]: {
@@ -66,11 +65,25 @@ export function AiProvider({children}) {
                         updatedAt: now(),
                         messages: [
                             ...prev[threadId].messages,
-                            {id: genId(), role: "assistant", content: fakeReply, ts: now()}
+                            {id: tempId, role: "assistant", content: "⏳ ...", ts: now()}
                         ]
                     }
                 }));
-            }, 1000);
+
+                sendToAPI(content).then((reply) => {
+                    setThreads((prev) => {
+                        const msgs = prev[threadId].messages.map((m) => 
+                            m.id === tempId ? {...m, content: reply} : m );
+                        return{
+                            ...prev,
+                            [threadId]: {
+                                ...prev[threadId],
+                                updatedAt: now(),
+                                messages: msgs
+                            }
+                        };
+                    });
+                });
         }
     }
 
@@ -103,6 +116,12 @@ export function AiProvider({children}) {
         delete newThreads[threadId];
         setThreads(newThreads);
         if(activeThreadId === threadId) setActiveThreadId(null);
+    }
+
+    async function sendToAPI(userMessage) {
+        return new Promise(resolve => {
+            setTimeout(() => resolve(`🤖 AI says: ${userMessage}`), 1200);
+        });
     }
 
 
