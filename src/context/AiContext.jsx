@@ -58,17 +58,26 @@ export function AiProvider({children}) {
 
         if(role === "user") {            
                 const tempId = genId();
-                setThreads((prev) => ({
+                setThreads((prev) => {
+                    const thread = prev[threadId];
+                    let updatedTitle = thread.title;
+                    if(thread.title === "New Chat") {
+                        updatedTitle = content.trim() ? content.slice(0, 20) + (content.length > 20 ? "..." : "") : `Chat with Ai - ${now().toLocaleDateString()}`;
+                    }
+
+                    return {
                     ...prev,
                     [threadId]: {
-                        ...prev[threadId],
+                        ...thread,
+                        title: updatedTitle,
                         updatedAt: now(),
                         messages: [
-                            ...prev[threadId].messages,
+                            ...thread.messages,
                             {id: tempId, role: "assistant", content: "⏳ ...", ts: now()}
                         ]
                     }
-                }));
+                    };
+                });
 
                 sendToAPI(content).then((reply) => {
                     setThreads((prev) => {
