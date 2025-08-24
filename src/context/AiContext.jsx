@@ -1,11 +1,14 @@
 import {createContext, useContext, useState, useEffect } from "react";
-import { getAiResponses, sendToAPI } from "../api/ai.js";
+import { mockRespond } from "../api/mockRespond.js";
+import { systemPromptTemplate } from "../utils/systemPrompt.js";
+import { useAppTools } from "../hooks/useAppTools.js";
 
 const AiContext = createContext();
 
 export function AiProvider({children}) {
     
-    const now = () => new Date();
+    const tools = useAppTools();
+    const now = () => new Date().toISOString();
     const genId = () => Date.now().toString(36) + Math.random().toString(16).slice(2);
     const LS_KEY = "ai:threads:v1"
     const [activeThreadId, setActiveThreadId] = useState(null);
@@ -80,11 +83,22 @@ export function AiProvider({children}) {
                     };
                 });
 
-                sendToAPI(content).then((reply) => {
+                const systemPrompt = systemPromptTemplate({
+                    todayISO: tools.getToday(),
+                    mood: tools.getMood(),
+                    journal: tools.getJournal(),
+                    plannedTasks: tools.getPlannedTasks()
+                });
+
+                const history = [
+                    ...threads[threadId].messages,
+                    { role: "user", content, ts: now(), id: genId() }
+                ];
+                mockRespond({systemPrompt, messages: history, tools}).then((reply) => {
                     setThreads((prev) => {
                         const msgs = prev[threadId].messages.map((m) => 
-                            m.id === tempId ? {...m, content: reply} : m );
-                        return{
+                            m.id === tempId ? {...m, content: reply} : m);
+                        return {
                             ...prev,
                             [threadId]: {
                                 ...prev[threadId],
@@ -94,6 +108,7 @@ export function AiProvider({children}) {
                         };
                     });
                 });
+
         }
     }
 
