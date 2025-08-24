@@ -15,7 +15,7 @@ function ThreadList() {
                 <div key={thread.id}
                 className={`p-2 mb-2 cursor-pointer border ${activeThreadId === thread.id ? "bg-gray-200" : ""}`}
                 onClick={() => setActiveThreadId(thread.id)}>
-                    {thread.title} <button onClick={() => deleteThread(thread.id)}>🗑️</button>
+                    {thread.title} <button onClick={(e) => {e.stopPropagation; deleteThread(thread.id);}}>🗑️</button>
                 </div>
             ))}
         </div>
