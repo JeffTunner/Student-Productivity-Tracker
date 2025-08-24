@@ -1,4 +1,5 @@
 import {createContext, useContext, useState, useEffect } from "react";
+import { getAiResponses, sendToAPI } from "../api/ai.js";
 
 const AiContext = createContext();
 
@@ -96,18 +97,6 @@ export function AiProvider({children}) {
         }
     }
 
-    function getFakeAIResponse(userMessage) {
-        const replies = [
-            "Hmm, that’s interesting!",
-            "Can you tell me more?",
-            "I see. Let’s think about that.",
-            "Got it 👍",
-            "Thanks for sharing!"
-        ];
-    
-        return replies[Math.floor(Math.random() * replies.length)];
-    }
-
     function clearThread(threadId) {
         if(!threads[threadId]) return;
 
@@ -127,19 +116,12 @@ export function AiProvider({children}) {
         if(activeThreadId === threadId) setActiveThreadId(null);
     }
 
-    async function sendToAPI(userMessage) {
-        return new Promise(resolve => {
-            setTimeout(() => resolve(`🤖 AI says: ${userMessage}`), 1200);
-        });
-    }
-
-
     return (
         <AiContext.Provider
         value={{
             activeThreadId, setActiveThreadId,
             threads, setThreads,
-            newThread, appendMessage, getFakeAIResponse, clearThread, deleteThread
+            newThread, appendMessage, clearThread, deleteThread
         }}>
             {children}
         </AiContext.Provider>
