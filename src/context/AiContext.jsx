@@ -83,7 +83,41 @@ export function AiProvider({children}) {
                     };
                 });
 
-                const systemPrompt = systemPromptTemplate({
+                (async () => {
+                    try {
+                        const response = await fetch("http://localhost:5000/chat", {
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({message: content})
+                        });
+                        const data = await response.json();
+                        const replyText = data.reply || "Hmm, I couldn’t generate a reply.";
+
+                        setThreads((prev) => {
+                            const msgs = prev[threadId].messages.map((m) => 
+                                m.id === tempId ? {...m, content: replyText} : m
+                            );
+                            return {
+                                ...prev,
+                                [threadId]: {...prev[threadId], updatedAt: now(), messages: msgs}
+                            };
+                        });
+                    }catch (e) {
+                        console.error(e);
+                        setThreads((prev) => {
+                            const msgs = prev[threadId].messages.map((m) => 
+                                m.id === tempId ? {...m, content: "⚠️ Backend error." } : m
+                            );
+                            return {
+                                ...prev,
+                                [threadId]: {...prev[threadId], updatedAt: now(), messages: msgs}
+                            };
+                        });
+                    }
+
+                })();
+
+               /* const systemPrompt = systemPromptTemplate({
                     todayISO: tools.getToday(),
                     mood: tools.getMood(),
                     journal: tools.getJournal(),
@@ -107,7 +141,7 @@ export function AiProvider({children}) {
                             }
                         };
                     });
-                });
+                }); */
 
         }
     }
