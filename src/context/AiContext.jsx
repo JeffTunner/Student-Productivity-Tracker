@@ -2,10 +2,17 @@ import {createContext, useContext, useState, useEffect } from "react";
 import { mockRespond } from "../api/mockRespond.js";
 import { systemPromptTemplate } from "../utils/systemPrompt.js";
 import { useAppTools } from "../hooks/useAppTools.js";
+import { useJournalMood } from "./JournalMoodContext.jsx";
+import { useTracker } from "./TrackerContext.jsx";
 
 const AiContext = createContext();
 
 export function AiProvider({children}) {
+
+    const {setMood, addOrUpdateEntry, journalData} = useJournalMood();
+    const {addTask} = useTracker();
+    const today = new Date();
+    const dateKey = today.toISOString().split('T')[0];
     
     const tools = useAppTools();
     const now = () => new Date().toISOString();
@@ -92,6 +99,17 @@ export function AiProvider({children}) {
                         });
                         const data = await response.json();
                         const replyText = data.reply || "Hmm, I couldn’t generate a reply.";
+                        const action = data.action || {type: "none"};
+
+                        if(action.type === "update_mood") {
+                            setMood(dateKey, action.value);
+                        }
+                        if(action.type === "update_journal") {
+                            addOrUpdateEntry(dateKey, action.value);
+                        }
+                        if(action.type === "update_tasks") {
+                            addTask(dateKey, "default", action.value);
+                        }
 
                         setThreads((prev) => {
                             const msgs = prev[threadId].messages.map((m) => 

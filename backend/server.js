@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
+import { act } from "react";
 
 const app = express();
 app.use(cors());
@@ -14,6 +15,7 @@ app.get("/", (_req, res) => {
 });
 
 app.post("/chat", async (req, res) => {
+    console.log("Incoming message:", req.body);
   try {
     const { message } = req.body;
     if (!message || typeof message !== "string") {
@@ -22,13 +24,35 @@ app.post("/chat", async (req, res) => {
 
     const result = await genai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: message,
+      contents: [{ role: "user", parts: [{ text: message }]}]
 
-      config: { thinkingConfig: { thinkingBudget: 0 } }
+      /*config: { thinkingConfig: { thinkingBudget: 0 } }*/
     });
 
-    const reply = result.text ?? "I didn’t get a response.";
-    res.json({ reply });
+    let reply = result?.candidates?.[0]?.content?.parts?.[0]?.text || "I didn’t get a response.";
+    let action = {type: "none", value: null};
+
+    const lower = message.toLowerCase();
+
+    if (lower.includes("mood")) {
+      const moodMatch = message.match(/\d+/);
+      if (moodMatch) {
+        action = { type: "update_mood", value: parseInt(moodMatch[0], 10) };
+      }
+    } else if (lower.includes("journal")) {
+      const journalMatch = message.split("journal")[1]?.trim();
+      if (journalMatch) {
+        action = { type: "update_journal", value: journalMatch };
+      }
+    } else if (lower.includes("task") || lower.includes("todo")) {
+      const taskMatch = message.split("task")[1]?.trim() || message.split("todo")[1]?.trim();
+      if (taskMatch) {
+        action = { type: "update_tasks", value: taskMatch };
+      }
+    }
+
+    console.log("Resolved action:", action);
+    res.json({ reply, action });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "AI request failed" });

@@ -3,7 +3,6 @@ import { useAi } from "../../context/AiContext.jsx";
 function ThreadList() {
 
     const {threads, newThread, setActiveThreadId, activeThreadId, deleteThread} = useAi();
-    console.log("threads:", threads);
 
     return (
         <div>

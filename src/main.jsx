@@ -7,13 +7,13 @@ import { JournalMoodProvider } from './context/JournalMoodContext.jsx'
 import { AiProvider } from './context/AiContext.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <AiProvider>   
+  <StrictMode>   
     <TrackerProvider>
     <JournalMoodProvider>
-      <App />
+      <AiProvider>
+        <App />
+      </AiProvider>      
     </JournalMoodProvider>
     </TrackerProvider>
-    </AiProvider> 
   </StrictMode>
 )
