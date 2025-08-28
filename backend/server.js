@@ -24,9 +24,9 @@ app.post("/chat", async (req, res) => {
 
     const result = await genai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: [{ role: "user", parts: [{ text: message }]}]
+      contents: [{ role: "user", parts: [{ text: message }]}],
 
-      /*config: { thinkingConfig: { thinkingBudget: 0 } }*/
+      config: { thinkingConfig: { thinkingBudget: 0 } }
     });
 
     let reply = result?.candidates?.[0]?.content?.parts?.[0]?.text || "I didn’t get a response.";
