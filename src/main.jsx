@@ -5,13 +5,16 @@ import App from './App.jsx'
 import { TrackerProvider } from './context/TrackerContext.jsx'
 import { JournalMoodProvider } from './context/JournalMoodContext.jsx'
 import { AiProvider } from './context/AiContext.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>   
     <TrackerProvider>
     <JournalMoodProvider>
       <AiProvider>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </AiProvider>      
     </JournalMoodProvider>
     </TrackerProvider>
