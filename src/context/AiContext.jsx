@@ -4,6 +4,7 @@ import { systemPromptTemplate } from "../utils/systemPrompt.js";
 import { useAppTools } from "../hooks/useAppTools.js";
 import { useJournalMood } from "./JournalMoodContext.jsx";
 import { useTracker } from "./TrackerContext.jsx";
+import { auth } from "../firebase.js";
 
 const AiContext = createContext();
 
@@ -92,11 +93,19 @@ export function AiProvider({children}) {
 
                 (async () => {
                     try {
+                        const user = auth.currentUser;
+                        if (!user) throw new Error("Not logged in!");
+
+                        const token = await user.getIdToken();
+
                         const response = await fetch("http://localhost:5000/chat", {
                             method: "POST",
-                            headers: {"Content-Type": "application/json"},
+                            headers: {"Content-Type": "application/json",
+                                "Authorization": `Bearer ${token}`
+                            },
                             body: JSON.stringify({message: content})
                         });
+                        
                         const data = await response.json();
                         const replyText = data.reply || "Hmm, I couldn’t generate a reply.";
                         const action = data.action || {type: "none"};

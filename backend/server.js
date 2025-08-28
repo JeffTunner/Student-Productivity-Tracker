@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
-import { act } from "react";
+import { requireAuth } from "./src/middleware/auth.js";
 
 const app = express();
 app.use(cors());
@@ -14,7 +14,7 @@ app.get("/", (_req, res) => {
   res.send("Backend is running suiii 🚀");
 });
 
-app.post("/chat", async (req, res) => {
+app.post("/chat", requireAuth, async (req, res) => {
     console.log("Incoming message:", req.body);
   try {
     const { message } = req.body;
