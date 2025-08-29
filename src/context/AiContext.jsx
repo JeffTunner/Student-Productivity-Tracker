@@ -94,7 +94,20 @@ export function AiProvider({children}) {
                 (async () => {
                     try {
                         const user = auth.currentUser;
-                        if (!user) throw new Error("Not logged in!");
+                        if (!user) {
+                        setThreads(prev => {
+                            const msgs = prev[threadId].messages.map(m =>
+                                m.id === tempId
+                                    ? { ...m, content: "❌ Please log in to chat with the AI." }
+                                    : m
+                            );
+                            return {
+                                ...prev,
+                                [threadId]: { ...prev[threadId], updatedAt: now(), messages: msgs }
+                            };
+                        });
+                        return;
+                        }
 
                         const token = await user.getIdToken();
 
@@ -105,6 +118,11 @@ export function AiProvider({children}) {
                             },
                             body: JSON.stringify({message: content})
                         });
+
+                        
+                        if (!response.ok) {
+                            throw new Error(`Server responded with ${response.status}`);
+                        }
                         
                         const data = await response.json();
                         const replyText = data.reply || "Hmm, I couldn’t generate a reply.";
@@ -133,7 +151,7 @@ export function AiProvider({children}) {
                         console.error(e);
                         setThreads((prev) => {
                             const msgs = prev[threadId].messages.map((m) => 
-                                m.id === tempId ? {...m, content: "⚠️ Backend error." } : m
+                                m.id === tempId ? {...m, content: `⚠️ Backend error: ${e.message}` } : m
                             );
                             return {
                                 ...prev,
