@@ -14,6 +14,7 @@ import DailyView from "./components/tracker/DailyView.jsx";
 import Journal from "./pages/Journal.jsx";
 import Mood from "./pages/Mood.jsx";
 import Ai from "./pages/AI.jsx";
+import Logout from "./pages/Logout.jsx";
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                     <Route path="/dashboard/journal" element={<ProtectedRoute><Journal /></ProtectedRoute>}/>
                     <Route path="/dashboard/mood" element={<ProtectedRoute><Mood /></ProtectedRoute>}/>
                     <Route path="/dashboard/ai" element={<ProtectedRoute><Ai /></ProtectedRoute>}/>
+                    <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>}/>
             </Routes>
         </Router>
     );
