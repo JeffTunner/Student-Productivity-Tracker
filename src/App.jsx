@@ -15,13 +15,14 @@ import Journal from "./pages/Journal.jsx";
 import Mood from "./pages/Mood.jsx";
 import Ai from "./pages/AI.jsx";
 import Logout from "./pages/Logout.jsx";
+import AuthRedirect from "./components/auth/AuthRedirect.jsx";
 
 function App() {
     return (
         <Router>
             <Routes>   
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/login" element={<AuthRedirect><Login /></AuthRedirect>} />
+                    <Route path="/signup" element={<AuthRedirect><Signup /></AuthRedirect>} />
                     <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                     <Route path="/dashboard/tracker" element={<ProtectedRoute><TrackerHome /></ProtectedRoute>} /> 
                     <Route path="/dashboard/tracker/daily" element={<ProtectedRoute><DailyTracker/></ProtectedRoute>} /> 
