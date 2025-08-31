@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import DayCard from "./DayCard.jsx";
+import { Link } from "react-router-dom";
 
 function WeeklyView({username}) {
 
@@ -71,6 +72,12 @@ function WeeklyView({username}) {
                 <h1>{greeting}, {name}</h1>
                 <h2>{headingDate} | Week: {weekRange}</h2>
             </header>
+            <div>
+            <Link to={`/dashboard/tracker`}
+                className="px-3 py-1 bg-white border-2 border-black rounded-xl shadow-[3px_3px_0px_black] font-bold hover:bg-gray-200 transition">
+                Tracker
+            </Link>
+            </div>
             <main className="grid grid-cols-7 border border-black min-h-screen">
                 {
                     dayNames.map((dayName, i) => {
