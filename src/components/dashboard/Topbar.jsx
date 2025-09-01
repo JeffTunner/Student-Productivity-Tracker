@@ -1,28 +1,36 @@
+function Topbar({ username }) {
+  const now = new Date();
+  const formattedDate = now.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
 
-function Topbar({username}) {
+  return (
+    <header className="bg-white border-4 border-black rounded-b-3xl shadow-[6px_6px_0px_#000] px-4 py-3 md:px-8 md:py-5">
+      <div className="flex justify-between items-center">
 
-    const now = new Date();
-    const formattedDate = now.toLocaleDateString('en-US',{
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+        <h1 className="text-gray-900 font-mono font-extrabold text-2xl md:text-4xl">
+          Hey, {username} 👋
+        </h1>
 
-    return (
-        <div>
-            <div className="flex justify-around items-center mb-2 md:mb-2">
-                <h1 className="text-gray-800 font-mono font-extrabold text-3xl md:text-5xl underline">Hey there, {username}</h1>
-                <img src="/src/assets/profile.jpeg" alt="profile pic" className="w-14 md:w-20 h-auto rounded-full cursor-pointer"/>
-            </div>
-            <div className="flex flex-col items-center gap-1 md:gap-1 font-mono">
-                <p className="md:text-3xl text-xl font-semibold text-gray-500">Welcome to the Dashboard 😄</p>
-                <div className="flex flex-col items-center md:flex-row md:gap-4">
-                    <span className="md:text-lg font-semibold text-gray-500">Whats on your mind today???</span>
-                    <span className="md:text-lg">Today is: {formattedDate}</span>
-                </div>
-            </div>
-        </div>
-    );
+        <img
+          src="/src/assets/profile.jpeg"
+          alt="profile pic"
+          className="w-12 md:w-16 h-auto border-4 border-black rounded-full shadow-[3px_3px_0px_#000] cursor-pointer hover:scale-105 transition-transform"
+        />
+      </div>
+
+      <div className="mt-3 flex flex-col md:flex-row md:justify-between md:items-center text-center md:text-left gap-2 font-mono">
+        <p className="text-gray-600 font-semibold text-lg md:text-xl">
+          Dashboard unlocked ⚡
+        </p>
+        <span className="text-gray-800 font-bold text-sm md:text-lg border-2 border-black rounded-xl px-3 py-1 shadow-[2px_2px_0px_#000] bg-white">
+          {formattedDate}
+        </span>
+      </div>
+    </header>
+  );
 }
+
 export default Topbar;
