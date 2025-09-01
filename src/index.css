@@ -2,3 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* index.css or App.css */
+.halftone-bg {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 12px 12px; /* dot spacing */
+  color: rgba(0,0,0,0.2); /* dot color (black, faded) */
+}
+.halftone-strong {
+  background-image: radial-gradient(currentColor 2px, transparent 2px);
+  background-size: 20px 20px;
+  color: rgba(0,0,0,0.25);
+}

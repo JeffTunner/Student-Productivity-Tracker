@@ -25,8 +25,8 @@ function DashboardLayout() {
                 <Sidebar isOpen={isSidebarOpen} setIsOpen={setSidebarOpen}/>
             </div>
             <div className={`flex flex-col transition-all duration-500 ${isSidebarOpen ? 'ml-64' : 'ml-0'} flex-1`}>
-                <header className="h-48 bg-slate-200 p-4"><Topbar username={"Abhinav Kaushik"}/></header>
-                <main className="bg-slate-100 flex-1 p-4"><TaskBoard /></main>
+                <header className="h-48  bg-slate-200 p-4"><Topbar username={"Abhinav Kaushik"}/></header>
+                <main className="halftone-bg bg-slate-100 flex-1 p-4"><TaskBoard /></main>
             </div>
         </div>
     );

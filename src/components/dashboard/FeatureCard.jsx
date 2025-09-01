@@ -1,15 +1,24 @@
 import { useNavigate } from "react-router-dom";
 
-function FeatureCard({title, description, n, route}) {
-
+function FeatureCard({ title, description, n, route }) {
     const navigate = useNavigate();
 
     return (
-            <div className={`bg-gray-400 col-span-${n} font-mono p-10 rounded-3xl w-80 h-40 flex flex-col justify-center items-center shadow-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-300 hover:ring-4 ring-black hover:w-96 hover:h-48`}
-            onClick={() => route && navigate(route)}>
-                <h1 className="font-extrabold text-5xl mb-4 rounded-lg">{title}</h1>
-                <p className="font-thin text-center">{description}</p>
-            </div>
+        <div
+            className={`
+                bg-white/80 backdrop-blur-sm border-2 border-black 
+                shadow-[6px_6px_0px_rgba(0,0,0,1)] 
+                rounded-2xl p-6 flex flex-col justify-center items-center 
+                text-center cursor-pointer 
+                transition-transform duration-300 ease-in-out 
+                hover:scale-105 hover:shadow-[10px_10px_0px_rgba(0,0,0,1)]
+            `}
+            onClick={() => route && navigate(route)}
+        >
+            <h1 className="font-extrabold text-3xl sm:text-4xl mb-3">{title}</h1>
+            <p className="text-sm sm:text-base text-gray-700">{description}</p>
+        </div>
     );
 }
+
 export default FeatureCard;
