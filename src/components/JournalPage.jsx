@@ -41,7 +41,7 @@ function JournalPage() {
             </div>
             <div className={`flex flex-col transition-all duration-500 ${isSidebarOpen ? 'ml-64' : 'ml-0'} flex-1`}>
                 <header className="bg-white border-4 border-black rounded-b-3xl shadow-[6px_6px_0px_#000] px-4 py-3 md:px-8 md:py-5 flex flex-col items-center gap-2">
-                    <h1 className="font-mono font-extrabold text-3xl md:text-5xl text-center">Your Diary!</h1>
+                    <h1 className="font-mono font-extrabold text-3xl md:text-5xl text-center">Your Personal Diary!</h1>
                     <p className="font-mono font-semibold text-gray-700 text-lg md:text-2xl">{headingDate}</p>
                 </header>
 
