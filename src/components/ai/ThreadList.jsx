@@ -26,7 +26,7 @@ function ThreadList({ isOpen, setIsOpen }) {
       />
 
       <div
-        className={`fixed top-0 left-0 bg-white border-black border-r-4 w-64 max-w-[80%] flex flex-col h-full
+        className={`fixed top-0 left-0 bg-white border-black border-r-4 w-64 max-w-[95%] flex flex-col h-full
                     transition-transform duration-500 ease-in-out z-40 shadow-[8px_0px_0px_black]
                     md:relative md:translate-x-0
                     ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
