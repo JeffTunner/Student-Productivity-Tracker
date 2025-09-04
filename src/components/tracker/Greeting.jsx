@@ -20,17 +20,14 @@ function Greeting({username}) {
     });
 
     return(
-        <div className="flex font-mono flex-col justify-center items-center gap-3">
-            <header className="flex items-center justify-center font-mono font-extrabold text-5xl underline text-gray-700">
-                {greeting}, {name} 👋
+        <div className="bg-white border-4 border-black rounded-b-3xl shadow-[6px_6px_0px_#000] px-4 py-3 md:px-8 md:py-5">
+            <header className="flex flex-col justify-center items-center md:items-start text-center md:text-left gap-2 font-mono">
+                <h1 className="text-2xl md:text-4xl font-extrabold text-black drop-shadow-[2px_2px_0_white]">{greeting}, {name} 👋</h1>          
+            <div className="flex flex-col gap-1 max-w-xl">
+                <h2 className="text-xl md:text-2xl font-extrabold text-black drop-shadow-[2px_2px_0_white]">Welcome to the Tracker 😄</h2>
+                <p className="text-sm md:text-lg font-semibold text-gray-700 drop-shadow-[1px_1px_0_white]">Here you can choose from 4 different options to do the tracking.</p>
+            </div>
             </header>
-            <div className="text-xl text-gray-400 font-extrabold">
-                {today}
-            </div>
-            <div className="text-center">
-                <h1 className="font-extrabold text-3xl text-gray-700 underline mb-2">Welcome to the Tracker 😄</h1>
-                <p className="text-gray-400 text-lg">Here you can choose from 4 different options to do the tracking.</p>
-            </div>
         </div>
     );
 }
