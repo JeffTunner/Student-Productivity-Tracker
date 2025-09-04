@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TaskCard from "./TaskCard.jsx";
 import Breadcrumb from "./Breadcrumb.jsx";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDate } from "../../context/TrackerContext.jsx";
 
 function DailyView({username}) {
@@ -35,7 +35,6 @@ function DailyView({username}) {
             localStorage.setItem("taskcards", JSON.stringify(cards));
         }
     }, [cards, hasLoaded]);
-
 
     function handleAddCard() {
         const newCard = {id: Date.now(), title: "", description: "", isSet: false};
@@ -78,29 +77,60 @@ function DailyView({username}) {
         day: 'numeric'
     });
 
+    const navigate = useNavigate();
+
+    function handleNextDay() {
+        const next = new Date(selectedDate);
+        next.setDate(next.getDate() + 1);
+        navigate(`/daily/${next.getFullYear()}/${next.getMonth()}/${next.getDate()}`);
+    }
+
+    function handlePrevDay() {
+        const prev = new Date(selectedDate);
+        prev.setDate(prev.getDate() - 1);
+        navigate(`/daily/${prev.getFullYear()}/${prev.getMonth()}/${prev.getDate()}`);
+    }
+
+    function handleToday() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        const day = today.getDate();
+        setCurrentYear(year);
+        setCurrentMonth(month);
+        setCurrentDay(day);
+        navigate(`/daily/${year}/${month}/${day}`);
+    }
+
     return (
-    <div>
-            <header className="flex flex-col items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
-                <h1 className="font-extrabold text-3xl text-slate-800">{greeting}, {username || "user"} 😊</h1>
-                <p className="text-slate-700">{headingDate}</p>
+    <div className="min-h-screen bg-white flex flex-col">
+            <header className="flex flex-col md:flex-row items-center justify-between gap-4 border-b-4 border-black shadow-[6px_6px_0px_black] p-4 md:p-6 font-mono">
+                <button className="font-extrabold text-base md:text-lg border-2 border-black rounded-full px-4 py-2 bg-white shadow-[2px_2px_0px_black] hover:bg-gray-700 hover:text-white hover:scale-105 transition" onClick={handleToday}>
+                    Today
+                </button>
+                <div className="flex items-center gap-4 md:gap-6">
+                    <button className="font-extrabold text-2xl border-4 border-black rounded-full w-12 h-12 flex items-center justify-center bg-white shadow-[3px_3px_0px_black] hover:scale-110 hover:bg-gray-200 transition" onClick={handlePrevDay}>←</button>
+                    <p className="text-slate-800 font-extrabold text-lg md:text-xl text-center">{headingDate}</p>
+                    <button className="font-extrabold text-2xl border-4 border-black rounded-full w-12 h-12 flex items-center justify-center bg-white shadow-[3px_3px_0px_black] hover:scale-105 hover:bg-gray-200 transition" onClick={handleNextDay}>→</button>
+                </div>
             </header>
-            <div>
+            <div className="px-4 py-2">
                 <Breadcrumb year={currentYear} month={currentMonth} date={currentDay}/>
             </div>
         <div className="flex items-center flex-col">
 
                 <div className="mt-4">
-                    <button className="bg-slate-800 text-white p-2 font-extrabold rounded-lg shadow-lg hover:bg-slate-700 hover:shadow-2xl hover:shadow-slate-950 hover:scale-105 transform transition-transform duration-300" onClick={handleAddCard}>+ Add Card</button>
+                    <button className="mb-6 bg-slate-900 text-white px-4 py-2 rounded-xl border-4 border-black font-mono font-extrabold shadow-[4px_4px_0px_black] hover:bg-slate-700 hover:scale-105 transition" onClick={handleAddCard}>+ Add Card</button>
                 </div>
-            <main className="flex flex-col flex-wrap justify-center items-center m-4 px-8 py-6 border-2 border-slate-900 rounded-xl shadow-xl font-mono w-fit max-w-full ">
+            <main className="px-4 py-6 md:px-8 md:py-10 border-4 border-black rounded-3xl bg-white shadow-[6px_6px_0px_black] font-mono w-full max-w-6xl ">
                 {cards.length === 0 && (
-                    <div className="border-b border-slate-800 flex flex-col gap-2">
-                        <h1 className="text-center text-xl font-extrabold underline ">No tasks yet.</h1>
-                        <p>Click + to add one!</p>
+                    <div className="text-center border-b-2 border-black pb-4 mb-4">
+                        <h1 className="text-xl md:text-2xl font-extrabold underline">No tasks yet.</h1>
+                        <p className="text-gray-600">Click + to add one!</p>
                     </div>
                 )}
 
-                <div className="flex flex-wrap gap-8 ">
+                <div className="flex flex-wrap justify-center gap-6">
                     {
                         cards.map((card, index) => (
                             <TaskCard key={card.id} card={card} onUpdate={handleUpdateCard} onDelete={handleDeleteCard} dateKey={`${currentYear}-${String(currentMonth+1).padStart(2, "0")}-${String(currentDay).padStart(2, "0")}`}/>
