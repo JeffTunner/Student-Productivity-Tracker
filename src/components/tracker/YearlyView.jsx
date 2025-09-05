@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import TaskModal from "./TaskModal.jsx";
 import { useNavigate } from "react-router-dom";
 import { useDate, useTracker } from "../../context/TrackerContext.jsx";
+import Breadcrumb from "./Breadcrumb.jsx";
 
 function YearlyView() {
 
@@ -77,31 +78,37 @@ function YearlyView() {
     }
 
     return (
-        <div>
-            <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
-                <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleToday}>
+        <div className="min-h-screen bg-white flex flex-col">
+            <header className="flex flex-col md:flex-row items-center justify-between gap-4 border-b-4 border-black shadow-[6px_6px_0px_black] p-4 md:p-6 font-mono">
+                <button className="font-extrabold text-base md:text-lg border-2 border-black rounded-full px-4 py-2 bg-white shadow-[2px_2px_0px_black] hover:bg-gray-700 hover:text-white hover:scale-105 transition" onClick={handleToday}>
                     Today
                 </button>
-                <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handlePrevYear}>←</button>
-                <h1 className="font-mono font-extrabold text-xl">{headingYear}</h1>
-                <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handleNextYear}>→</button>
-                <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleGridView}>{isWeekGridView ? 'Yearly' : '52 Weeks Grid'}</button>
+                <div className="flex items-center gap-4 md:gap-6">
+                    <button className="font-extrabold text-2xl border-4 border-black rounded-full w-12 h-12 flex items-center justify-center bg-white shadow-[3px_3px_0px_black] hover:scale-110 hover:bg-gray-200 transition" onClick={handlePrevYear}>←</button>
+                    <h1 className="text-slate-800 font-extrabold text-lg md:text-xl text-center">{headingYear}</h1>
+                    <button className="font-extrabold text-2xl border-4 border-black rounded-full w-12 h-12 flex items-center justify-center bg-white shadow-[3px_3px_0px_black] hover:scale-110 hover:bg-gray-200 transition" onClick={handleNextYear}>→</button>
+                    <button className="font-extrabold text-base md:text-lg border-2 border-black rounded-full px-4 py-2 bg-white shadow-[2px_2px_0px_black] hover:bg-gray-700 hover:text-white hover:scale-105 transition" onClick={handleGridView}>{isWeekGridView ? 'Yearly' : '52 Weeks Grid'}</button>
+                </div>
             </header>
 
-            <main>
+            <div className="px-4 py-2">
+                <Breadcrumb year={currentYear}/>
+            </div>
+
+            <main className="p-4">
                 {isWeekGridView ? (
-                    <div className="grid grid-cols-4 gap-2 p-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                         {Array.from({length: 52}, (_, week) => {
                             const key = `${currentYear}-${week}`;
                             return(
-                            <div key={week} className={`border p-4 rounded-lg  text-center font-bold hover:bg-gray-100 hover:shadow-lg transition cursor-pointer ${completedWeeks.includes(key) ? 'line-through' : ''}`} onClick={() => handleToggleWeek(week)}>
+                            <div key={week} className={`border-4 border-black px-4 py-6 rounded-xl text-center font-extrabold bg-white shadow-[4px_4px_0px_black] hover:scale-105 hover:bg-gray-100 transition cursor-pointer ${completedWeeks.includes(key) ? 'line-through text-gray-400 bg-gray-200' : ''}`} onClick={() => handleToggleWeek(week)}>
                                 Week {week + 1}
                             </div>
                             );
                         })}
                     </div>
                 ) : (
-                <div className="grid grid-cols-3 gap-4 p-4 h-svh">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {Array.from({length: 12}, (_, i) => {
                         const monthName = new Date(currentYear, i).toLocaleDateString("en-US", {
                             month: "long"
@@ -110,27 +117,23 @@ function YearlyView() {
                         currentYear === new Date().getFullYear() && i === new Date().getMonth();
                         const dateKey = `${currentYear}-${String(i + 1).padStart(2, "0")}`;
                         return (
-                        <div key={i} className={` flex flex-col justify-center items-center gap-6 border p-4 rounded-lg text-center font-bold hover:bg-gray-100 hover:shadow-lg transition cursor-pointer ${isCurrentMonth ? 'bg-gray-500' : ''}`}>
-                           <span onClick={() => handleMonthClick(i)}>{monthName}
+                        <div key={i} className={` flex flex-col justify-between items-center gap-4 border-4 border-black px-6 py-6 rounded-2xl text-center font-extrabold  shadow-[6px_6px_0px_black] hover:scale-105 text-black hover:bg-gray-100 transition cursor-pointer ${isCurrentMonth ? 'bg-gray-800 text-white hover:text-black' : ''}`}>
+                           <span onClick={() => handleMonthClick(i)} className="text-lg md:text-xl underline decoration-2 decoration-black">{monthName} 
                            {tasks[dateKey]?.["monthly"]?.length > 0 && ( `(${tasks[dateKey]["monthly"].length})`)}</span>
-                           {isAdding && selectedMonth === i ? (
-                            <TaskModal 
-                            isOpen={isAdding}
-                            dateKey={selectedMonth !== null ? `${currentYear}-${String(selectedMonth + 1).padStart(2, "0")}` : ""}
-                            onClose={() => setIsAdding(false)}
-                            cardId="monthly"/>
-                           ) : (
-                            <button className="bg-slate-800 w-48 text-white p-2 font-extrabold rounded-lg shadow-lg hover:bg-slate-700 hover:shadow-2xl hover:shadow-slate-950 hover:scale-105 transform transition-transform duration-300"
+                            <button className="mb-6 bg-slate-900 text-white px-4 py-2 rounded-xl border-4 border-black font-mono font-extrabold shadow-[4px_4px_0px_black] hover:bg-slate-700 hover:scale-105 transition"
                             onClick={() => handleAddTasksForMonth(i)}>
                                 + Add Task
                             </button>
-                           )} 
-
                         </div>
-                        )
+                        );
                     })}
                 </div>
                 )}
+                <TaskModal 
+                    isOpen={isAdding}
+                    dateKey={selectedMonth !== null ? `${currentYear}-${String(selectedMonth + 1).padStart(2, "0")}` : ""}
+                    onClose={() => setIsAdding(false)}
+                    cardId="monthly"/>
 
             </main>
         </div>
