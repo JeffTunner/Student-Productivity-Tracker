@@ -54,41 +54,41 @@ function TaskCard({card, onUpdate, onDelete, dateKey}) {
     }
 
     return (
-        <div className="flex flex-col border-slate-900 border-2 rounded-3xl px-8 py-6 shadow-xl w-[300px] max-w-full mt-8 cursor-pointer hover:shadow-2xl hover:ring-2 ring-black">
+        <div className="flex flex-col border-4 border-black rounded-2xl px-6 py-4 shadow-[6px_6px_0px_black] w-full max-w-md mt-6 cursor-pointer hover:scale-[1.02] transition-transform">
             {
                 !card.isSet ? (
-                    <div className="flex flex-col gap-2 mb-4">
+                    <div className="flex flex-col gap-3 mb-4">
                             <input type="text" placeholder="Enter the Title" value={card.title} onChange={handleTitleChange} 
-                            className="border border-black px-2 py-1 rounded" onKeyDown={(e) => {if(e.key === "Enter") {onUpdate(card.id,{...card, isSet: true});}} }/>
+                            className="border-2 border-black px-3 py-2 rounded-xl font-bold placeholder-gray-600 focus:ring-2 focus:ring-black" onKeyDown={(e) => {if(e.key === "Enter") {onUpdate(card.id,{...card, isSet: true});}} }/>
                             <input type="text" placeholder="Description" value={card.description} onChange={handleDescriptionChange} 
-                            className="border border-black px-2 py-1 rounded" onKeyDown={(e) => {if(e.key === "Enter"){onUpdate(card.id,{...card, isSet: true});}} }/>
-                            <button className="border border-black px-4 py-2 rounded hover:bg-gray-100" onClick={() => onUpdate(card.id,{...card, isSet: true})}>
+                            className="border-2 border-black px-3 py-2 rounded-xl placeholder-gray-600 focus:ring-2 focus:ring-black" onKeyDown={(e) => {if(e.key === "Enter"){onUpdate(card.id,{...card, isSet: true});}} }/>
+                            <button className="border-2 border-black px-4 py-2 rounded-xl bg-white shadow-[3px_3px_0px_black] font-bold hover:bg-gray-200 active:translate-y-[2px]" onClick={() => onUpdate(card.id,{...card, isSet: true})}>
                                 Set Card
                             </button>                                  
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-2 mb-4">
-                        <h1 className="text-center font-extrabold text-3xl underline">{card.title}</h1>
-                        <p className="text-gray-700">{card.description}</p>
-                        <div>
-                            <input type="text" placeholder="Add your tasks..." value={taskInput} onChange={handleTaskInput} /> 
-                            <button className="border border-black px-4 py-2 rounded hover:bg-gray-100" onClick={handleAddTask}>+</button>
+                    <div className="flex flex-col gap-3">
+                        <h1 className="text-center font-extrabold text-2xl underline decoration-4 decoration-black">{card.title}</h1>
+                        <p className="text-gray-700 font-mono text-sm">{card.description}</p>
+                        <div className="flex items-center gap-2">
+                            <input type="text" placeholder="Add your tasks..." value={taskInput} onChange={handleTaskInput} className="flex-1 border-2 border-black px-2 py-1 rounded-lg"/> 
+                            <button className="border-2 border-black px-3 py-1 rounded-lg bg-white shadow-[2px_2px_0px_black] font-bold hover:bg-gray-200 active:translate-y-[1px]" onClick={handleAddTask}>+</button>
                         </div>
-                        <ol>
+                        <ol className="flex flex-col gap-2 mt-2">
                             {dayTasks.map((task) => (
                                 <li key={task.id}>
                                     {task.isEditing ? (
-                                        <input type="text" defaultValue={task.text} className="border border-black px-2 py-1 rounded" 
+                                        <input type="text" defaultValue={task.text} className="border-2 border-black px-2 py-1 rounded-lg w-full" 
                                         onKeyDown={(e) => {if(e.key === "Enter"){ handleUpdateTask(task.id, e.target.value);}    
                                             if (e.key === "Escape") { handleCancelEdit(task.id);}
                 
                                          }}/>
                                     ) : (
-                                        <div className="flex items-center">
-                                        <input type="checkbox" checked={task.completed} onChange={() => handleToggleTask(task.id, task.completed)}/>
-                                        <span id="text" className={`ml-2 ${task.completed ? 'line-through text-gray-400' : ''}`}>{task.text}</span>
-                                        <button className="border border-black p-2 ml-2" onClick={() => handleEditTask(task.id)}>✏️</button>
-                                        <button className="border border-black p-2 ml-2" onClick={() => handleRemoveTask(task.id)}>❌</button>
+                                        <div className="flex items-center gap-2">
+                                        <input type="checkbox" checked={task.completed} onChange={() => handleToggleTask(task.id, task.completed)} className="w-5 h-5 accent-black"/>
+                                        <span id="text" className={`flex-1 ${task.completed ? 'line-through text-gray-400' : 'font-medium'}`}>{task.text}</span>
+                                        <button className="border-2 border-black p-1 rounded-lg shadow-[2px_2px_0px_black] hover:bg-gray-200" onClick={() => handleEditTask(task.id)}>✏️</button>
+                                        <button className="border-2 border-black p-1 rounded-lg shadow-[2px_2px_0px_black] hover:bg-gray-200" onClick={() => handleRemoveTask(task.id)}>❌</button>
                                         </div>
                                     )
                                     }
@@ -96,7 +96,7 @@ function TaskCard({card, onUpdate, onDelete, dateKey}) {
                             )
                             )}
                         </ol>
-                        <button className="mt-2 border border-black px-2 py-1 rounded hover:shadow-2xl w-fit" onClick={() => onDelete(card.id)}>
+                        <button className="mt-3 border-2 border-black px-3 py-1 rounded-lg hover:bg-gray-100 shadow-[3px_3px_0px_black] font-bold w-fit" onClick={() => onDelete(card.id)}>
                             🗑️
                         </button>
                                     
