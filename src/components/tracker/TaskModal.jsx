@@ -59,36 +59,37 @@ function TaskModal({isOpen, dateKey, onClose, cardId = "default"}) {
     }
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-6 relative w-96 max-w-full">
-                <button className="absolute top-2 right-2 text-xl font-bold" onClick={handleSaveAndClose}>
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
+            <div className="bg-white border-2 border-black rounded-xl shadow-[6px_6px_0px_black] w-full max-w-lg p-6 relative">
+                <button className="absolute top-3 right-3 text-black text-xl font-bold hover:scale-110 transition" onClick={handleSaveAndClose}>
                     ❌
                 </button>
 
-                <h2 className="text-lg font-bold mb-4 cursor-pointer hover:shadow-xl"
+                <h2 className="text-xl font-bold mb-4 cursor-pointer hover:underline"
                 onClick={() => handleDayToggle()}>
-                    Tasks for: {dateKey || "No Date Selected"} (Click for Daily View)
+                    Tasks for: {dateKey || "No Date Selected"}{" "}
+                    <span className="text-sm text-gray-600">(Click for Daily View)</span>
                 </h2>
 
                 <div className="flex gap-2 mb-4">
-                    <input type="text" placeholder="Type your tasks..." className="border w-full rounded px-2 py-1" value={taskInput} onChange={handleTaskInput}
+                    <input type="text" placeholder="Type your tasks..." className="flex-1 border-2 border-black rounded-lg px-3 py-2 focus:outline-none" value={taskInput} onChange={handleTaskInput}
                     onKeyDown={(e) => {if(e.key === "Enter") handleAddOrUpdateTask();}}/>
-                    <button className="border-2 rounded-md border-slate-600 p-2 hover:shadow-2xl" onClick={handleAddOrUpdateTask}>
+                    <button className="border-2 border-black bg-white px-4 py-2 rounded-lg shadow-[3px_3px_0px_black] hover:shadow-[5px_5px_0px_black] transition" onClick={handleAddOrUpdateTask}>
                         {editingTaskId !== null ? "✔️" : "+"}
                     </button>
                 </div>
 
-                <ol className="list-decimal list-inside space-y-1">
+                <ol className="space-y-2 max-h-64 overflow-y-auto pr-2">
                     {dateTasks.map((task) => (
-                        <li key={task.id} className="flex justify-between items-center">
+                        <li key={task.id} className="flex justify-between items-center border-2 border-black rounded-lg px-3 py-2 bg-white shadow-[3px_3px_0px_black] hover:shadow-[5px_5px_0px_black] transition">
                             <div className="flex items-center gap-2">
-                                <input type="checkbox" checked={task.completed} onChange={() => handleToggleTask(task)}/>
-                                <span className={`${task.completed ? 'line-through text-gray-400' : ''}`}>{task.text}</span>
+                                <input type="checkbox" className="w-5 h-5 accent-black" checked={task.completed} onChange={() => handleToggleTask(task)}/>
+                                <span className={`${task.completed ? 'line-through text-gray-500' : 'text-black'}`}>{task.text}</span>
                             </div>
                             
-                            <div className="flex gap-1">
-                                <button className="border" onClick={() => handleEditTask(task)}>✏️</button>
-                                <button className="border" onClick={() => handleDeleteTask(task.id)}>🗑️</button>
+                            <div className="flex gap-2">
+                                <button className="hover:scale-110 transition" onClick={() => handleEditTask(task)}>✏️</button>
+                                <button className="hover:scale-110 transition" onClick={() => handleDeleteTask(task.id)}>🗑️</button>
                             </div>
                         </li>
                         
@@ -96,7 +97,9 @@ function TaskModal({isOpen, dateKey, onClose, cardId = "default"}) {
 
                 </ol>
 
-                <button className="border-2 rounded-md border-slate-600 p-2 hover:shadow-2xl" onClick={handleSaveAndClose}>Save and Close</button>
+                <div className="mt-4 flex justify-end">
+                    <button className="border-2 border-black bg-white px-4 py-2 rounded-lg shadow-[3px_3px_0px_black] hover:shadow-[5px_5px_0px_black] transition" onClick={handleSaveAndClose}>Save and Close</button>
+                </div>
             </div>
         </div>
     );
