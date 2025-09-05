@@ -115,66 +115,79 @@ function MonthlyView() {
     }
 
     return (
-        <div>
-            <header className="flex justify-center items-center gap-2 bg-gray-100 font-mono p-4 border border-slate-950">
-                <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleToday}>
+        <div className="min-h-screen bg-white flex flex-col">
+            <header className="flex flex-col md:flex-row items-center justify-between gap-4 border-b-4 border-black shadow-[6px_6px_0px_black] p-4 md:p-6 font-mono">
+                <button className="font-extrabold text-base md:text-lg border-2 border-black rounded-full px-4 py-2 bg-white shadow-[2px_2px_0px_black] hover:bg-gray-700 hover:text-white hover:scale-105 transition" onClick={handleToday}>
                     Today
                 </button>
-                <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handlePrevMonth}>←</button>
-                <h1 className="font-mono font-extrabold text-xl">{headingDate}</h1>
-                <button className="font-extrabold text-2xl border-2 border-black rounded-full p-2 hover:shadow-2xl hover:bg-gray-200" onClick={handleNextMonth}>→</button>
-                <button className="font-bold text-xl border-2 border-black rounded-full p-3 hover:bg-gray-500 hover:text-white" onClick={handleWeekView}>
-                    {isWeekView ? 'Month' : 'Week'}
-                </button>
+                <div className="flex items-center gap-4 md:gap-6">
+                    <button className="font-extrabold text-2xl border-4 border-black rounded-full w-12 h-12 flex items-center justify-center bg-white shadow-[3px_3px_0px_black] hover:scale-110 hover:bg-gray-200 transition" onClick={handlePrevMonth}>←</button>
+                    <h1 className="text-slate-800 font-extrabold text-lg md:text-xl text-center">{headingDate}</h1>
+                    <button className="font-extrabold text-2xl border-4 border-black rounded-full w-12 h-12 flex items-center justify-center bg-white shadow-[3px_3px_0px_black] hover:scale-110 hover:bg-gray-200 transition" onClick={handleNextMonth}>→</button>
+                    <button className="font-extrabold text-base md:text-lg border-2 border-black rounded-full px-4 py-2 bg-white shadow-[2px_2px_0px_black] hover:bg-gray-700 hover:text-white hover:scale-105 transition" onClick={handleWeekView}>
+                        {isWeekView ? 'Month' : 'Week'}
+                    </button>
+                </div>
             </header>
-            <div>
+            <div className="px-4 py-2">
                 <Breadcrumb year={currentYear} month={currentMonth}/>
             </div>
 
-            <main>
+            <main className="flex-1 p-4 md:p-6 font-mono">
                 {isWeekView ? (
-                    <div className="flex flex-wrap gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {weeks.map((week, index) => (
                             <div
                             key={index}
-                            className="p-3 border rounded-lg cursor-pointer bg-white hover:bg-gray-100"
+                            className="p-4 border-4 border-black rounded-xl bg-white shadow-[4px_4px_0px_black] cursor-pointer hover:bg-gray-100 hover:scale-105 transition"
                             onClick={() => console.log("Selected week:", week)}
                             >
-                            {formatDate(week.start)} – {formatDate(week.end)}
+                            <p className="font-extrabold text-slate-800 text-center text-lg">
+                                {formatDate(week.start)} – {formatDate(week.end)}
+                            </p>
                             </div>
                          ))}
                     </div>
                 ) : ( 
                 <>
-                <div className="grid grid-cols-7 gap-2 font-bold text-center">
+                <div className="flex flex-col gap-4">
+                    <div className="grid grid-cols-7 gap-2 text-center font-extrabold text-slate-800">
                     {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((dayName) => (
-                        <div key={dayName}>{dayName}</div>
+                        <div className="p-2 border-b-4 border-black bg-gray-300 rounded-t-md shadow-[2px_2px_0px_black]"
+                         key={dayName}>{dayName}</div>
                     ))}
-                </div>
+                    </div>
+
                 <div className="grid grid-cols-7 gap-2">
                     {calenderDays.map((day, index) => {
                         const dateKey = day ? getDateKey(currentYear, currentMonth, day) : null;
                         const count = day ? (tasks[dateKey]?.["default"]?.length || 0) : 0;
                         return (
-                            <div key={index} className={`border p-4 text-center cursor-pointer ${dateKey === todayKey ? 'bg-slate-500 text-white rounded-full' : ''}`} onClick={() => {
+                            <div key={index} className={`h-20 flex flex-col justify-center items-center border-4 border-black bg-white shadow-[3px_3px_0px_black] cursor-pointer transition ${dateKey === todayKey ? "bg-gray-800 text-white scale-105" : "hover:bg-gray-100"}`} onClick={() => {
                                 if(day) {
                                     const dateKey = getDateKey(currentYear, currentMonth, day);
                                     setSelectedDateKey(dateKey);
                                     setIsModalOpen(true);
                                 }
                             }}>
-                                {day}
-                                {count > 0 && `(${count})`
+                            <span className="font-extrabold text-lg">{day || ""}</span>
+                                 {count > 0 && (
+                                <span className="text-xs font-bold text-slate-600 mt-1">
+                                    {count} task{count > 1 ? "s" : ""}
+                                </span>
+                            
                                    /* <ul>
                                         {tasks.map((task,i) => (
                                             <li key={i}>{task}</li>
                                         ))}
                                     </ul> */
-                                }
+                                 )}
+                                
                             </div>
-                        ) 
+                        ); 
 
                     })}    
+                </div>
                 </div>
                 </>
                 )}

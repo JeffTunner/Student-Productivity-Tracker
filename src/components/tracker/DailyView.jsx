@@ -6,17 +6,6 @@ import { useDate } from "../../context/TrackerContext.jsx";
 
 function DailyView({username}) {
 
-    const hours = new Date().getHours();
-    let greeting;
-    
-    if(hours < 12) {
-        greeting = "Good Morning!";
-    } else if(hours < 18) {
-        greeting = "Good Afternoon";
-    } else {
-        greeting = "Good Evening";
-    }
-
     const [cards, setCards] = useState([]);
     const [hasLoaded, setHasLoaded] = useState(false);
 
