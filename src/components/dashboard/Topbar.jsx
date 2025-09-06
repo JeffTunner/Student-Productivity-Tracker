@@ -1,10 +1,30 @@
-function Topbar({ username }) {
+import { auth } from "../../firebase";
+import { useState, useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+
+function Topbar() {
+
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUsername(user.displayName || "User");
+      } else {
+        setUsername("Guest");
+      }
+    });
+    return () => unsubscribe();
+  },[]);
+
   const now = new Date();
   const formattedDate = now.toLocaleDateString("en-US", {
     weekday: "long",
     month: "short",
     day: "numeric",
   });
+
+
 
   return (
     <header className="bg-white border-4 border-black rounded-b-3xl shadow-[6px_6px_0px_#000] px-4 py-3 md:px-8 md:py-5">

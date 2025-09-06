@@ -28,7 +28,7 @@ function TrackerTabs() {
 
             <div className={`flex flex-col transition-all duration-500 ${isSidebarOpen ? 'ml-64' : 'ml-0'} flex-1`}>
                 <header className="h-48 p-4">
-                    <Greeting username="Abhi"/>
+                    <Greeting/>
                 </header>
                 <main className="flex-1 p-4">
                     <TabBar />

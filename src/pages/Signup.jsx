@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 
 function Signup() {
@@ -25,6 +25,7 @@ function Signup() {
         try {
             setLoading(true);
             const cred = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(cred.user, {displayName: username});
             console.log("User Created", cred.user);
             alert("You have successfully Signed Up!");
             navigate("/dashboard");
