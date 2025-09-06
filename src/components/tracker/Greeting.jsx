@@ -13,6 +13,7 @@ function Greeting() {
                 setUsername("Guest");
             }
         });
+        return () => unsubscribe();
     },[]);
 
 

@@ -53,10 +53,10 @@ function Sidebar({ isOpen, setIsOpen}) {
                     <Link to="/dashboard/ai">AI Assistant</Link>
                 </li>
 
-                <li className={`p-3 rounded-lg border-2 border-black shadow-[3px_3px_0px_black] hover:bg-gray-100 cursor-pointer transition 
+               { /*<li className={`p-3 rounded-lg border-2 border-black shadow-[3px_3px_0px_black] hover:bg-gray-100 cursor-pointer transition 
             ${location.pathname === '/dashboard/settings' ? ' bg-gray-200' : 'bg-white'}`}>
                     <Link to="/dashboard/settings">Settings</Link>
-                </li>
+                </li>*/}
 
             </ul>
             </div>
