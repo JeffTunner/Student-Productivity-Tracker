@@ -35,7 +35,7 @@ function Topbar() {
         </h1>
 
         <img
-          src="/src/assets/profile.jpeg"
+          src="/src/assets/logo.png"
           alt="profile pic"
           className="w-12 md:w-16 h-auto border-4 border-black rounded-full shadow-[3px_3px_0px_#000] cursor-pointer hover:scale-105 transition-transform"
         />
