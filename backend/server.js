@@ -6,7 +6,7 @@ import { requireAuth } from "./src/middleware/auth.js";
 
 const app = express();
 app.use(cors({
-  origin: "https://student-productivity-tracker-v1.netlify.app/",
+  origin: "https://student-productivity-tracker-v1.netlify.app",
   credentials: true
 }));
 app.use(express.json());
