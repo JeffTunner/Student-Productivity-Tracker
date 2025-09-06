@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -36,6 +36,8 @@ function App() {
                     <Route path="/dashboard/mood" element={<ProtectedRoute><Mood /></ProtectedRoute>}/>
                     <Route path="/dashboard/ai" element={<ProtectedRoute><Ai /></ProtectedRoute>}/>
                     <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>}/>
+                    <Route path="/" element={<Navigate to="/login" replace />} />
+                    <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
         </Router>
     );

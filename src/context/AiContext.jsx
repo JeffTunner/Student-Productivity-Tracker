@@ -111,7 +111,7 @@ export function AiProvider({children}) {
 
                         const token = await user.getIdToken();
 
-                        const response = await fetch("http://localhost:5000/chat", {
+                        const response = await fetch("https://student-productivity-tracker-backend.onrender.com/chat", {
                             method: "POST",
                             headers: {"Content-Type": "application/json",
                                 "Authorization": `Bearer ${token}`
