@@ -66,23 +66,23 @@ function DayCard({date, isToday, tasks, onUpdate}) {
     }
     
     return(
-        <div className="flex flex-col border-slate-900 border-2 rounded-3xl px-8 py-6 shadow-xl w-[300px] max-w-full mt-8 cursor-pointer hover:shadow-2xl hover:ring-2 ring-black">
-            <header className={`text-center px-2 py-2 mb-4 ${isToday ? "bg-slate-400 rounded-full" : ""}`}>
-                <div className="font-bold">{date.toLocaleDateString("en-US", {weekday: "short"})}</div>
-                <div>{date.getDate()}</div>
+        <div className="flex flex-col border-4 border-black rounded-2xl px-6 py-4 bg-white shadow-[6px_6px_0px_black] md:w-[300px] max-w-full h-auto md:h-screen mt-6 cursor-pointer hover:scale-[1.02] transition-transform duration-200 overflow-y-auto">
+            <header className={`text-center px-3 py-2 mb-4 border-2 border-black rounded-lg shadow-[3px_3px_0px_black] font-extrabold uppercase ${isToday ? "bg-gray-800 text-white" : ""}`}>
+                <div>{date.toLocaleDateString("en-US", {weekday: "short"})}</div>
+                <div className="text-xl">{date.getDate()}</div>
             </header>
 
             { 
                 !isAdding ? (
-                    <button className="bg-slate-800 text-white p-2 font-extrabold rounded-lg shadow-lg hover:bg-slate-700 hover:shadow-2xl hover:shadow-slate-950 hover:scale-105 transform transition-transform duration-300"
+                    <button className="mb-6 bg-slate-900 text-white px-4 py-2 rounded-xl border-4 border-black font-mono font-extrabold shadow-[4px_4px_0px_black] hover:bg-slate-700 hover:scale-105 transition"
                     onClick={handleIsAdding}>
                         + Add tasks
                     </button>
                     
                 ) : (
-                    <div className="flex gap-1">
-                        <input type="text" placeholder="Tasks go here..." className="border w-full" value={taskInput} onChange={handleTaskInput}/>
-                        <button className="border-2 rounded-md border-slate-600 p-2 hover:shadow-2xl" onClick={handleAddTask}>
+                    <div className="flex gap-2">
+                        <input type="text" placeholder="Tasks go here..." className="border-2 border-black px-2 py-1 rounded-md w-full" value={taskInput} onChange={handleTaskInput}/>
+                        <button className="border-2 border-black px-3 py-1 font-bold shadow-[2px_2px_0px_black] hover:bg-gray-100" onClick={handleAddTask}>
                             +
                         </button>
                     </div>
@@ -90,22 +90,24 @@ function DayCard({date, isToday, tasks, onUpdate}) {
             }
 
             <main>
-                <ol className="mt-6">
+                <ol className="mt-4 space-y-2">
                     {tasks.map((task, index) => (
-                        <li key={index}>
+                        <li key={index} className="flex items-center justify-between px-2 py-1">
                             {task.isEditing ? (
-                                <input type="text" value={editText} className="border border-black px-2 py-1 rounded w-full"
+                                <input type="text" value={editText} className="border-2 border-black px-2 py-1 rounded w-full"
                                 onChange={(e) => setEditText(e.target.value)} 
                                 onKeyDown={(e) => {if(e.key === "Enter"){ handleUpdateTask(index, editText);}    
                                             if (e.key === "Escape") { handleCancelEdit(index);}
                 
                                 }}/>
                             ) : (
-                                <div className="flex items-center">
-                                    <input type="checkbox" checked={task.completed} onChange={() => handleToggleTask(index)}/>
-                                    <span className={`ml-2 mr-2 ${task.completed ? 'line-through' : ''}`}>{task.text}</span>
-                                    <button className="border border-black" onClick={() => handleEditTask(index)}>✏️</button>
-                                    <button className="border border-black " onClick={() => handleRemoveTask(index)}>❌</button>
+                                <div className="flex items-center flex-1">
+                                    <input type="checkbox" checked={task.completed} onChange={() => handleToggleTask(index)} className="mr-2 accent-black"/>
+                                    <span className={`font-bold mr-2 ${task.completed ? 'line-through text-gray-400' : 'text-black'}`}>{task.text}</span>
+                                    <div className="flex gap-1">
+                                        <button className="px-2 border-2 border-black rounded shadow-[1px_1px_0px_black]" onClick={() => handleEditTask(index)}>✏️</button>
+                                        <button className="px-2 border-2 border-black rounded shadow-[1px_1px_0px_black]" onClick={() => handleRemoveTask(index)}>❌</button>
+                                    </div>
                                 </div>
                             )}
 
