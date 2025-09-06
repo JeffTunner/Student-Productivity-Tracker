@@ -5,7 +5,10 @@ import { GoogleGenAI } from "@google/genai";
 import { requireAuth } from "./src/middleware/auth.js";
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "https://student-productivity-tracker-v1.netlify.app/",
+  credentials: true
+}));
 app.use(express.json());
 
 const genai = new GoogleGenAI({});
