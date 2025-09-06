@@ -1,6 +1,6 @@
 import Sidebar from "../dashboard/Sidebar.jsx";
 import Greeting from "./Greeting.jsx";
-import TabBar from "./Tabbar.jsx";
+import TabBar from "./TabBar.jsx";
 import React, {useState, useEffect} from "react";
 
 function TrackerTabs() {
