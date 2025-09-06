@@ -13,7 +13,7 @@ import YearlyView from "./components/tracker/YearlyView.jsx";
 import DailyView from "./components/tracker/DailyView.jsx";
 import Journal from "./pages/Journal.jsx";
 import Mood from "./pages/Mood.jsx";
-import Ai from "./pages/AI.jsx";
+import Ai from "./pages/Ai.jsx";
 import Logout from "./pages/Logout.jsx";
 import AuthRedirect from "./components/auth/AuthRedirect.jsx";
 
