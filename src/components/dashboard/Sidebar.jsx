@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import Hamburger from '../../assets/hamburger-menu-icon.png';
 
 function Sidebar({ isOpen, setIsOpen}) {
 
@@ -14,7 +15,7 @@ function Sidebar({ isOpen, setIsOpen}) {
     return (
     <>
     
-        <button className='fixed top-4 left-4 z-50' onClick={() => {toggleSidebar()}}><img src="/src/assets/hamburger-menu-icon.png" alt="hamburger-menu" className="w-14 h-auto rounded-xl hover:invert transition"/></button>
+        <button className='fixed top-4 left-4 z-50' onClick={() => {toggleSidebar()}}><img src={Hamburger} alt="hamburger-menu" className="w-14 h-auto rounded-xl hover:invert transition"/></button>
 
         <div className={`fixed top-0 left-0 bg-white border-black border-r-4 w-64 max-w-[80%] flex flex-col h-full transition-transform duration-500 ease-in-out z-40 shadow-[8px_0px_0px_black] ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 

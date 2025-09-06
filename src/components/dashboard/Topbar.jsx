@@ -1,6 +1,7 @@
 import { auth } from "../../firebase";
 import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
+import Logo from "../../assets/logo.png";
 
 function Topbar() {
 
@@ -35,7 +36,7 @@ function Topbar() {
         </h1>
 
         <img
-          src="/src/assets/logo.png"
+          src={Logo}
           alt="profile pic"
           className="w-12 md:w-16 h-auto border-4 border-black rounded-full shadow-[3px_3px_0px_#000] cursor-pointer hover:scale-105 transition-transform"
         />
